@@ -6,7 +6,7 @@
 
 class ServerHandler {
 public:
-    ServerHandler(); 
+    ServerHandler();
     void setup(const char* ssid, const char* password); 
     void loop();
 
