@@ -5,10 +5,9 @@
 #include "ServerHandler.hpp"
 #include "DataHandler.hpp"
 
-ServerHandler serverHandler;
 DataHandler dataHandler;
+ServerHandler serverHandler(&dataHandler); // Référence à dataHandler
 
-int cpt = 0;
 
 void setup() {
     Serial.begin(9600);
@@ -20,9 +19,12 @@ void setup() {
 }
 
 void loop() {
-    serverHandler.loop();
-
     Serial.println(dataHandler.getJsonData());
-    dataHandler.updateTemperatureData(cpt++);
+    
+    dataHandler.updateTemperatureData(random(1800, 2200)/100.0);
+    dataHandler.updateHumidityData(random(4400, 5000)/100.0);
     delay(1000);
+
+
+    serverHandler.loop();
 }

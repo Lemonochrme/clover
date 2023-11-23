@@ -1,6 +1,6 @@
 #include "ServerHandler.hpp"
 
-ServerHandler::ServerHandler() : server(80) {
+ServerHandler::ServerHandler(DataHandler * dataHandler) : server(80), dataHandler(dataHandler) {
 }
 
 void ServerHandler::setup(const char* ssid, const char* password) { // On utilise les scope resolution operator pour définir les méthodes la classe ServerHandle qui elle est dans hpp
@@ -17,21 +17,14 @@ void ServerHandler::setup(const char* ssid, const char* password) { // On utilis
     Serial.println(WiFi.localIP());
 
     server.begin();
-    server.on("/", [this]() { this->sendDataToServer("Hello World!"); }); // fonction lamda pour gérer les requettes get
+    server.on("/", [this]() { this->handleRoot(); }); // fonction lamda pour gérer les requettes get
 }
 
 void ServerHandler::loop() {
     server.handleClient();
 }
 
-int ServerHandler::readSensorData() {
-    return 123;
-}
-
-void ServerHandler::sendDataToServer(char * data) {
-    server.send(200, "text/plain", data);
-}
-
 void ServerHandler::handleRoot() {
-    server.send(200, "text/plain", "Sensor Data: " + String(readSensorData()));
+    String jsonFormattedData = dataHandler->getJsonData();
+    server.send(200, "application/json", jsonFormattedData);
 }
