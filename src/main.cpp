@@ -4,27 +4,27 @@
 
 #include "ServerHandler.hpp"
 #include "DataHandler.hpp"
+#include "Component.hpp"
+#include "Display.hpp"
 
 DataHandler dataHandler;
 ServerHandler serverHandler(&dataHandler); // Référence à dataHandler
+Component humidity(ComponentType::Analog, PIN_A0);
+Display screen;
 
-
-void setup() {
+void setup()
+{
     Serial.begin(9600);
-
-    dataHandler.updateTemperatureData(20.0);
-    dataHandler.updateHumidityData(3.141592);
-
-    serverHandler.setup("Redmi Note 10", "bbooksdd");
+    serverHandler.setup("Iphone de Nicole", "cesthonteux");
 }
 
-void loop() {
+void loop()
+{
+    screen.loop();
+    dataHandler.updateTemperatureData(random(1800, 2200) / 100.0);
+    dataHandler.updateHumidityData(static_cast<float>(std::any_cast<int>(humidity.getValue())));
     Serial.println(dataHandler.getJsonData());
-    
-    dataHandler.updateTemperatureData(random(1800, 2200)/100.0);
-    dataHandler.updateHumidityData(random(4400, 5000)/100.0);
     delay(1000);
-
 
     serverHandler.loop();
 }
