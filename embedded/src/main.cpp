@@ -7,6 +7,13 @@
 #include "Component.hpp"
 #include "Display.hpp"
 
+#ifdef SSID_CLOVER
+    const char* ssid = SSID_CLOVER;
+#endif
+#ifdef PSWD_CLOVER
+    const char* pswd = PSWD_CLOVER;
+#endif
+
 DataHandler dataHandler;
 ServerHandler serverHandler(&dataHandler); // Référence à dataHandler
 Component humidity(ComponentType::Analog, PIN_A0);
@@ -15,13 +22,14 @@ Display screen;
 void setup()
 {
     Serial.begin(9600);
-    serverHandler.setup("Iphone de Nicole", "cesthonteux");
+    serverHandler.setup(ssid, pswd);
 }
 
 void loop()
 {
     screen.loop();
     dataHandler.updateTemperatureData(random(1800, 2200) / 100.0);
+    // 0 -> air(0), 0-300 -> dry(20), 300-700 -> humid (580), 700-950 -> water(940)
     dataHandler.updateHumidityData(static_cast<float>(std::any_cast<int>(humidity.getValue())));
     Serial.println(dataHandler.getJsonData());
     delay(1000);
