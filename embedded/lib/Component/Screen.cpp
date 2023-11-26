@@ -44,8 +44,15 @@ void Screen::connecting(uint8_t state)
 
   // Connecting dot dot dot (depending on state)
   strncpy(connectText, "Connecting", connectSize);
-  for (uint8_t i = 0; i < state; i++)
-    strncat(connectText, ".", connectSize);
+  size_t currentLength = strlen(connectText);
+
+for (uint8_t i = 0; i < state; i++) {
+    // Checking space
+    if (currentLength+1 < connectSize) {
+        strncat(connectText, ".", currentLength+1);
+        currentLength += 1;
+    }
+}
 
   // Displaying connecting text and setup bar.
   _screen->clearBuffer();
