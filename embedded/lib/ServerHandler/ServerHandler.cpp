@@ -1,7 +1,9 @@
 #include "ServerHandler.hpp"
 
-ServerHandler::ServerHandler(DataHandler * dataHandler) : server(80), dataHandler(dataHandler) {
+ServerHandler::ServerHandler() : server(80) {
 }
+
+ServerHandler::~ServerHandler() {}
 
 void ServerHandler::setup(const char* ssid, const char* password) { // On utilise les scope resolution operator pour définir les méthodes la classe ServerHandle qui elle est dans hpp
     Serial.begin(9600);
@@ -25,6 +27,7 @@ void ServerHandler::loop() {
 }
 
 void ServerHandler::handleRoot() {
-    String jsonFormattedData = dataHandler->getJsonData();
+    auto& dataHandler = DataHandler::GetInstance();
+    String jsonFormattedData = dataHandler.getJsonData();
     server.send(200, "application/json", jsonFormattedData);
 }

@@ -3,7 +3,6 @@
 #include <ESP8266WebServer.h>
 
 #include "ServerHandler.hpp"
-#include "DataHandler.hpp"
 #include "Component.hpp"
 #include "Display.hpp"
 
@@ -14,19 +13,21 @@
     const char* pswd = PSWD_CLOVER;
 #endif
 
-DataHandler dataHandler;
-ServerHandler serverHandler(&dataHandler); // Référence à dataHandler
 Component humidity(ComponentType::Analog, PIN_A0);
 Display screen;
 
 void setup()
 {
+    auto& serverHandler = ServerHandler::GetInstance();
     Serial.begin(9600);
     serverHandler.setup(ssid, pswd);
 }
 
 void loop()
 {
+    auto& serverHandler = ServerHandler::GetInstance();
+    auto& dataHandler = DataHandler::GetInstance();
+
     screen.loop();
     dataHandler.updateTemperatureData(random(1800, 2200) / 100.0);
     // 0 -> air(0), 0-300 -> dry(20), 300-700 -> humid (580), 700-950 -> water(940)

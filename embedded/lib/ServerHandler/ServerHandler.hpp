@@ -8,14 +8,25 @@
 
 class ServerHandler {
 public:
-    ServerHandler(DataHandler * dataHandler);
+    // Singleton
+    static ServerHandler& GetInstance()
+    {
+        static ServerHandler instance;
+        return instance;
+    }
+    // Public functions
     void setup(const char* ssid, const char* password); 
     void loop();
 
 private:
-    ESP8266WebServer server;
+    // Singleton
+    ServerHandler();
+    ~ServerHandler();
+    ServerHandler(const ServerHandler&) = delete;
+    ServerHandler& operator=(const ServerHandler&) = delete;
+    // Private variables/functions
     void handleRoot();
-    DataHandler * dataHandler; // Pointeur vers dataHandler
+    ESP8266WebServer server;
 };
 
 #endif

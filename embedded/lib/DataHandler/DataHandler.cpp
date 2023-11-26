@@ -2,6 +2,8 @@
 
 DataHandler::DataHandler() {}
 
+DataHandler::~DataHandler() {}
+
 void DataHandler::updateTemperatureData(float temp) {
     temperature = temp;
 }
