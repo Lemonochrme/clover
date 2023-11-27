@@ -31,6 +31,7 @@ namespace Display
         void updateString(String str);
         u8g2_uint_t getStyle();
         uint16_t getTextWidth();
+        StyleWidth getStyleWidth();
     private:
         void Calculate();
         String _text;

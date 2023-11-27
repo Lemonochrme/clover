@@ -7,7 +7,7 @@
 
 namespace Display
 {
-    constexpr uint8_t FONT_SIZE=8;
+    constexpr uint8_t FONT_SIZE=6;
 
     class Screen
     {
@@ -21,7 +21,7 @@ namespace Display
         // Public functions
         void Setup(uint8_t *font);
         void connecting(uint8_t state = 0);
-        void connected(const char *ipaddress);
+        void connected(const char *ipaddress, uint8_t timing);
         void loop();
         // Getters
         uint16_t getHeight();
@@ -43,6 +43,7 @@ namespace Display
         uint8_t *_font;
         uint16_t _width;
         uint16_t _height;
+        String _loading;
 
         // Static Components
         Components connectingWindow;

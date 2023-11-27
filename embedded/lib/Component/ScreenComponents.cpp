@@ -32,16 +32,17 @@ void Components::Display(StyleHeight sh, uint16_t offset, uint16_t padding)
     const auto centeredOffset = (Screen::GetInstance().getHeight() - totalTextSize) - offset;
     for (size_t i = 0; i < _boxes.size(); i++)
     {
+        const auto x = (_boxes[i].getStyleWidth() == StyleWidth::CENTERED) ? _boxes[i].getX() : _boxes[i].getX()+padding*i;
         switch (sh)
         {
         case StyleHeight::TOP:
-            Screen::GetInstance().getScreen().drawButtonUTF8(_boxes[i].getX()+padding*i, (i * FONT_SIZE)+offset+padding*i, _boxes[i].getStyle(), _boxes[i].getTextWidth(), padding, padding, _boxes[i].getString());
+            Screen::GetInstance().getScreen().drawButtonUTF8(x, (i * FONT_SIZE)+offset+padding*i, _boxes[i].getStyle(), _boxes[i].getTextWidth(), padding, padding, _boxes[i].getString());
             break;
         case StyleHeight::CENTERED:
-            Screen::GetInstance().getScreen().drawButtonUTF8(_boxes[i].getX()+padding*i, ((centeredOffset / 2)+i*FONT_SIZE)+offset+padding*i, _boxes[i].getStyle(), _boxes[i].getTextWidth(), padding, padding, _boxes[i].getString());
+            Screen::GetInstance().getScreen().drawButtonUTF8(x, ((centeredOffset / 2)+i*FONT_SIZE)+offset+padding*i, _boxes[i].getStyle(), _boxes[i].getTextWidth(), padding, padding, _boxes[i].getString());
             break;
         case StyleHeight::BOTTOM:
-            Screen::GetInstance().getScreen().drawButtonUTF8(_boxes[i].getX()+padding*i, (centeredOffset + i * FONT_SIZE)+offset+padding*i, _boxes[i].getStyle(), _boxes[i].getTextWidth(), padding, padding, _boxes[i].getString());
+            Screen::GetInstance().getScreen().drawButtonUTF8(x, (centeredOffset + i * FONT_SIZE)+offset+padding*i, _boxes[i].getStyle(), _boxes[i].getTextWidth(), padding, padding, _boxes[i].getString());
             break;
         }
     }
@@ -80,3 +81,4 @@ void TextBox::updateString(String str)
 }
 u8g2_uint_t TextBox::getStyle() { return _style; }
 uint16_t TextBox::getTextWidth() { return _textWidth; }
+StyleWidth TextBox::getStyleWidth() { return _styleWidth; }

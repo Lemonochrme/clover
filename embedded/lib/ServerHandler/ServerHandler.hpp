@@ -6,6 +6,8 @@
 
 #include "DataHandler.hpp"
 
+constexpr uint8_t MAX_TIME = 28;
+
 class ServerHandler {
 public:
     // Singleton
@@ -17,6 +19,8 @@ public:
     // Public functions
     void setup(const char* ssid, const char* password); 
     void loop();
+    // Return if the screen needs to be changed.
+    bool showNext();
 
 private:
     // Singleton
@@ -27,6 +31,7 @@ private:
     // Private variables/functions
     void handleRoot();
     ESP8266WebServer server;
+    uint8_t display_time;
 };
 
 #endif

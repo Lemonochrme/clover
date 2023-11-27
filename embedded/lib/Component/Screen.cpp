@@ -1,6 +1,7 @@
 #include "Screen.hpp"
 #include <string.h>
 #include <vector>
+#include <algorithm>
 
 using namespace Display;
 
@@ -10,6 +11,7 @@ Screen::Screen()
   _screen->begin();
   _width = _screen->getDisplayWidth();
   _height = _screen->getDisplayHeight();
+  _loading = "";
 }
 
 Screen::~Screen()
@@ -34,6 +36,7 @@ uint16_t Screen::setupHeader(const uint16_t w_padding, const uint16_t h_padding)
   // calculating y position
   const uint16_t y = FONT_SIZE + ((w_padding + 1) * 2);
   _screen->drawButtonUTF8(w_padding, y, U8G2_BTN_INV, _screen->getDisplayWidth(), h_padding, w_padding, "Clover Setup");
+  _screen->setFont(_font);
   return y;
 }
 
@@ -67,8 +70,9 @@ void Screen::connecting(uint8_t state)
   _screen->sendBuffer();
 }
 
-void Screen::connected(const char *ipaddress)
+void Screen::connected(const char *ipaddress, uint8_t timing)
 {
+
   // Displaying connecting text and setup bar.
   _screen->clearBuffer();
   const auto setupPadding = setupHeader();
@@ -76,7 +80,16 @@ void Screen::connected(const char *ipaddress)
   // Reactive Component
   connectedWindow.Update(2, ipaddress);
   // Displaying
-  connectedWindow.Display(StyleHeight::CENTERED, setupPadding + 5, 2);
+  connectedWindow.Display(StyleHeight::CENTERED, setupPadding, 4);
+  
+  // Creating loading timing
+  if(timing !=0)
+  {
+    _screen->setFont(u8g2_font_3x3basic_tr);
+    _loading.concat(" ");
+    _screen->drawButtonUTF8(0, _screen->getDisplayHeight()-5, U8G2_BTN_INV, _screen->getStrWidth(_loading.c_str()), 0, 0, _loading.c_str());
+    _screen->setFont(_font);
+  }
   _screen->sendBuffer();
 }
 
@@ -84,7 +97,7 @@ void Screen::loop()
 {
   _screen->clearBuffer(); // clear the internal memory
   _screen->setFont(_font);
-  _screen->drawStr(0, 10, "Hello World!"); // write something to the internal memory
+  _screen->drawStr(0, 10, "Hello Plant!"); // write something to the internal memory
   _screen->sendBuffer();                   // transfer internal memory to the display
   delay(1000);
 }

@@ -1,7 +1,7 @@
 #include "ServerHandler.hpp"
 #include "Screen.hpp"
 
-ServerHandler::ServerHandler() : server(80) {
+ServerHandler::ServerHandler() : server(80), display_time(0) {
 }
 
 ServerHandler::~ServerHandler() {}
@@ -17,15 +17,22 @@ void ServerHandler::setup(const char* ssid, const char* password) { // On utilis
         state >= 3 ? state = 0: state++;
     }
 
-    auto ip = WiFi.localIP().toString();
-    Display::Screen::GetInstance().connected(ip.c_str());
-
     server.begin();
     server.on("/", [this]() { this->handleRoot(); }); // fonction lamda pour gérer les requettes get
 }
 
 void ServerHandler::loop() {
+    if(display_time < MAX_TIME)
+    {
+        Display::Screen::GetInstance().connected(WiFi.localIP().toString().c_str(),display_time);
+        display_time++;
+    }
     server.handleClient();
+}
+
+bool ServerHandler::showNext()
+{
+    return (display_time >= MAX_TIME);
 }
 
 void ServerHandler::handleRoot() {
