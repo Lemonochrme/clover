@@ -49,7 +49,7 @@ namespace Display
         void Add(TextBox box);
         void Add(std::vector<TextBox> boxes);
         void Update(size_t index, String text);
-        void Display(StyleHeight sh=StyleHeight::TOP, uint16_t offset=0);
+        void Display(StyleHeight sh=StyleHeight::TOP, uint16_t offset=0, uint16_t padding=0);
     private:
         // Boxes
         std::vector<TextBox> _boxes;

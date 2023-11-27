@@ -21,8 +21,8 @@ void Screen::Setup(uint8_t *font)
   _font = font;
   _screen->setFont(_font);
 
-    // Static Components
-  connectingWindow.Add(TextBox("connect",StyleWidth::CENTERED, U8G2_BTN_BW0));
+  // Static Components
+  connectingWindow.Add(TextBox("connect", StyleWidth::CENTERED, U8G2_BTN_BW0));
   connectedWindow.Add({TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, U8G2_BTN_BW0),
                        TextBox("IP address: ", StyleWidth::LEFT, U8G2_BTN_BW0),
                        TextBox("addr", StyleWidth::CENTERED, U8G2_BTN_BW0)});
@@ -46,20 +46,22 @@ void Screen::connecting(uint8_t state)
   strncpy(connectText, "Connecting", connectSize);
   size_t currentLength = strlen(connectText);
 
-for (uint8_t i = 0; i < state; i++) {
+  for (uint8_t i = 0; i < state; i++)
+  {
     // Checking space
-    if (currentLength+1 < connectSize) {
-        strncat(connectText, ".", currentLength+1);
-        currentLength += 1;
+    if (currentLength + 1 < connectSize)
+    {
+      strncat(connectText, ".", currentLength + 1);
+      currentLength += 1;
     }
-}
+  }
 
   // Displaying connecting text and setup bar.
   _screen->clearBuffer();
   const auto setupPadding = setupHeader();
 
   // Reactive Component
-  connectingWindow.Update(0,connectText);
+  connectingWindow.Update(0, connectText);
   // Displaying
   connectingWindow.Display(StyleHeight::CENTERED, setupPadding);
   _screen->sendBuffer();
@@ -72,9 +74,9 @@ void Screen::connected(const char *ipaddress)
   const auto setupPadding = setupHeader();
 
   // Reactive Component
-  connectedWindow.Update(2,ipaddress);
+  connectedWindow.Update(2, ipaddress);
   // Displaying
-  connectedWindow.Display(StyleHeight::CENTERED, setupPadding+5);
+  connectedWindow.Display(StyleHeight::CENTERED, setupPadding + 5, 2);
   _screen->sendBuffer();
 }
 

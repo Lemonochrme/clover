@@ -26,7 +26,7 @@ void Components::Update(size_t index, String text)
     _boxes[index].updateString(text);
 }
 
-void Components::Display(StyleHeight sh, uint16_t offset)
+void Components::Display(StyleHeight sh, uint16_t offset, uint16_t padding)
 {
     const auto totalTextSize = _boxes.size() * FONT_SIZE;
     const auto centeredOffset = (Screen::GetInstance().getHeight() - totalTextSize) - offset;
@@ -35,13 +35,13 @@ void Components::Display(StyleHeight sh, uint16_t offset)
         switch (sh)
         {
         case StyleHeight::TOP:
-            Screen::GetInstance().getScreen().drawButtonUTF8(_boxes[i].getX(), (i * FONT_SIZE) + offset, _boxes[i].getStyle(), _boxes[i].getTextWidth(), 0, 0, _boxes[i].getString());
+            Screen::GetInstance().getScreen().drawButtonUTF8(_boxes[i].getX()+padding*i, (i * FONT_SIZE)+offset+padding*i, _boxes[i].getStyle(), _boxes[i].getTextWidth(), padding, padding, _boxes[i].getString());
             break;
         case StyleHeight::CENTERED:
-            Screen::GetInstance().getScreen().drawButtonUTF8(_boxes[i].getX(), ((centeredOffset / 2) + i * FONT_SIZE) + offset, _boxes[i].getStyle(), _boxes[i].getTextWidth(), 0, 0, _boxes[i].getString());
+            Screen::GetInstance().getScreen().drawButtonUTF8(_boxes[i].getX()+padding*i, ((centeredOffset / 2)+i*FONT_SIZE)+offset+padding*i, _boxes[i].getStyle(), _boxes[i].getTextWidth(), padding, padding, _boxes[i].getString());
             break;
         case StyleHeight::BOTTOM:
-            Screen::GetInstance().getScreen().drawButtonUTF8(_boxes[i].getX(), (centeredOffset + i * FONT_SIZE) + offset, _boxes[i].getStyle(), _boxes[i].getTextWidth(), 0, 0, _boxes[i].getString());
+            Screen::GetInstance().getScreen().drawButtonUTF8(_boxes[i].getX()+padding*i, (centeredOffset + i * FONT_SIZE)+offset+padding*i, _boxes[i].getStyle(), _boxes[i].getTextWidth(), padding, padding, _boxes[i].getString());
             break;
         }
     }
