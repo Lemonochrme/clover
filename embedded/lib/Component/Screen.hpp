@@ -7,7 +7,7 @@
 
 namespace Display
 {
-    constexpr uint8_t FONT_SIZE=6;
+    constexpr uint8_t FONT_SIZE=8;
 
     class Screen
     {
@@ -48,6 +48,7 @@ namespace Display
         // Static Components
         Components connectingWindow;
         Components connectedWindow;
+        Components loopWindow;
     };
 }
 

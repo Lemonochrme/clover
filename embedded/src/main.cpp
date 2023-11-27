@@ -18,7 +18,7 @@ Component humidity(ComponentType::Analog, PIN_A0);
 void setup()
 {
     Serial.begin(9600);
-    Display::Screen::GetInstance().Setup(const_cast<uint8_t*>(u8g2_font_profont10_tr));
+    Display::Screen::GetInstance().Setup(const_cast<uint8_t*>(u8g2_font_busdisplay8x5_tr));
     ServerHandler::GetInstance().setup(ssid, pswd);
 }
 

@@ -28,6 +28,7 @@ void Screen::Setup(uint8_t *font)
   connectedWindow.Add({TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, U8G2_BTN_BW0),
                        TextBox("IP address: ", StyleWidth::LEFT, U8G2_BTN_BW0),
                        TextBox("addr", StyleWidth::CENTERED, U8G2_BTN_BW0)});
+  loopWindow.Add(TextBox("Hello, Plant!", StyleWidth::CENTERED, U8G2_BTN_BW1));
 }
 
 uint16_t Screen::setupHeader(const uint16_t w_padding, const uint16_t h_padding)
@@ -95,11 +96,12 @@ void Screen::connected(const char *ipaddress, uint8_t timing)
 
 void Screen::loop()
 {
-  _screen->clearBuffer(); // clear the internal memory
+  _screen->clearBuffer();
   _screen->setFont(_font);
-  _screen->drawStr(0, 10, "Hello Plant!"); // write something to the internal memory
-  _screen->sendBuffer();                   // transfer internal memory to the display
-  delay(1000);
+
+  loopWindow.Display(StyleHeight::CENTERED);
+
+  _screen->sendBuffer();
 }
 
 uint16_t Screen::getHeight() { return _height; }
