@@ -1,28 +1,11 @@
-#ifndef _HEADER_SCREEN_COMPONENTS
-#define _HEADER_SCREEN_COMPONENTS
-#include <WString.h>
-#include <vector>
-#include <U8g2lib.h>
+#ifndef _HEADER_DISPLAY_TEXTBOX
+#define _HEADER_DISPLAY_TEXTBOX
+#include "Box.hpp"
 
 namespace Display
 {
-    // Enums
-    enum class StyleWidth
-    {
-        LEFT,
-        CENTERED,
-        RIGHT
-    };
 
-    enum class StyleHeight
-    {
-        TOP,
-        CENTERED,
-        BOTTOM
-    };
-
-    // TextBox which inherits from Box (Single Component)
-    class TextBox
+    class TextBox : public Box
     {
     public:
         TextBox();
@@ -38,11 +21,10 @@ namespace Display
          * @param takeWholeLine if true, the button takes the whole line
          */
         TextBox(String str, StyleWidth sw, StyleHeight sh, u8g2_uint_t style, u8g2_uint_t w_padding=0, u8g2_uint_t h_padding=0, bool takeWholeLine=false);
-        void Display(size_t size, size_t position, u8g2_uint_t offsetY);
-        void Update(String str);
-        StyleHeight getStyleHeight();
-        // Only vertical/height padding
-        u8g2_uint_t getPadding();
+        void Display(size_t size, size_t position, u8g2_uint_t offsetY) override;
+        void Update(String str) override;
+        StyleHeight getStyleHeight() override;
+        u8g2_uint_t getPadding() override;
     private:
         void Calculate();
         String _text;
@@ -56,21 +38,6 @@ namespace Display
         uint16_t _textWidth;
         bool _takeWholeLine;
     };
+}
 
-    // Components which contains every type
-    class Components
-    {
-    public:
-        Components();
-        void Add(TextBox box);
-        void Add(std::vector<TextBox> boxes);
-        void Update(size_t index, String text);
-        void Display();
-    private:
-        size_t GetSize(StyleHeight sh);
-        // Boxes
-        std::vector<TextBox> _boxes;
-    };
-};
-
-#endif //_HEADER_SCREEN_COMPONENTS
+#endif //_HEADER_DISPLAY_TEXTBOX

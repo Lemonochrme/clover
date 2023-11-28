@@ -1,5 +1,5 @@
 #include "ServerHandler.hpp"
-#include "Screen.hpp"
+#include "../Display/Screen.hpp"
 
 ServerHandler::ServerHandler() : server(80), display_time(0) {
 }

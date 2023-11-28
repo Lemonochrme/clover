@@ -1,7 +1,6 @@
 #include "Screen.hpp"
-#include <string.h>
 #include <vector>
-#include <algorithm>
+#include <memory>
 
 using namespace Display;
 
@@ -15,21 +14,23 @@ Screen::Screen()
 }
 
 Screen::~Screen()
-{}
+{
+}
 
 void Screen::Setup(uint8_t *font)
 {
   _font = font;
   _screen->setFont(_font);
 
-  headerSetup = TextBox("Clover Setup", StyleWidth::LEFT, StyleHeight::TOP, U8G2_BTN_INV,2,5, true);
+  headerSetup = TextBox("Clover Setup", StyleWidth::LEFT, StyleHeight::TOP, U8G2_BTN_INV, 2, 5, true);
   // Static Components
-  connectingWindow.Add({headerSetup, TextBox("connect", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0)});
-  connectedWindow.Add({headerSetup,
-                       TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0,0,2),
-                       TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0,0,2),
-                       TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0,0,2)});
-  loopWindow.Add(TextBox("Hello, Plant!", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW1));
+  connectingWindow.Add({std::make_shared<TextBox>(headerSetup),
+                        std::make_shared<TextBox>(TextBox("connect", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0))});
+  connectedWindow.Add({std::make_shared<TextBox>(headerSetup),
+                       std::make_shared<TextBox>(TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
+                       std::make_shared<TextBox>(TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
+                       std::make_shared<TextBox>(TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2))});
+  loopWindow.Add(std::make_shared<TextBox>(TextBox("Hello, Plant!", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW1)));
 }
 
 void Screen::connecting(uint8_t state)

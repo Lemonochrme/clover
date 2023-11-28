@@ -3,12 +3,11 @@
 #include <U8g2lib.h>
 #include <Wire.h>
 
-#include "ScreenComponents.hpp"
+#include "Components/Components.hpp"
+#include "Components/TextBox.hpp"
 
 namespace Display
 {
-    constexpr uint8_t FONT_SIZE=8;
-
     class Screen
     {
     public:
