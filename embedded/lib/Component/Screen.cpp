@@ -22,13 +22,13 @@ void Screen::Setup(uint8_t *font)
   _font = font;
   _screen->setFont(_font);
 
-  headerSetup = TextBox("Clover Setup", StyleWidth::LEFT, StyleHeight::TOP, U8G2_BTN_INV);
+  headerSetup = TextBox("Clover Setup", StyleWidth::LEFT, StyleHeight::TOP, U8G2_BTN_INV,2,5, true);
   // Static Components
   connectingWindow.Add({headerSetup, TextBox("connect", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0)});
   connectedWindow.Add({headerSetup,
-                       TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0),
-                       TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0),
-                       TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0)});
+                       TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0,0,2),
+                       TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0,0,2),
+                       TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0,0,2)});
   loopWindow.Add(TextBox("Hello, Plant!", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW1));
 }
 
