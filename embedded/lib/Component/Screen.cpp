@@ -15,30 +15,21 @@ Screen::Screen()
 }
 
 Screen::~Screen()
-{
-}
+{}
 
 void Screen::Setup(uint8_t *font)
 {
   _font = font;
   _screen->setFont(_font);
 
+  headerSetup = TextBox("Clover Setup", StyleWidth::LEFT, StyleHeight::TOP, U8G2_BTN_INV);
   // Static Components
-  connectingWindow.Add(TextBox("connect", StyleWidth::CENTERED, U8G2_BTN_BW0));
-  connectedWindow.Add({TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, U8G2_BTN_BW0),
-                       TextBox("IP address: ", StyleWidth::LEFT, U8G2_BTN_BW0),
-                       TextBox("addr", StyleWidth::CENTERED, U8G2_BTN_BW0)});
-  loopWindow.Add(TextBox("Hello, Plant!", StyleWidth::CENTERED, U8G2_BTN_BW1));
-}
-
-uint16_t Screen::setupHeader(const uint16_t w_padding, const uint16_t h_padding)
-{
-  _screen->setFont(u8g2_font_helvB08_tr);
-  // calculating y position
-  const uint16_t y = FONT_SIZE + ((w_padding + 1) * 2);
-  _screen->drawButtonUTF8(w_padding, y, U8G2_BTN_INV, _screen->getDisplayWidth(), h_padding, w_padding, "Clover Setup");
-  _screen->setFont(_font);
-  return y;
+  connectingWindow.Add({headerSetup, TextBox("connect", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0)});
+  connectedWindow.Add({headerSetup,
+                       TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0),
+                       TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0),
+                       TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0)});
+  loopWindow.Add(TextBox("Hello, Plant!", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW1));
 }
 
 void Screen::connecting(uint8_t state)
@@ -49,7 +40,6 @@ void Screen::connecting(uint8_t state)
   // Connecting dot dot dot (depending on state)
   strncpy(connectText, "Connecting", connectSize);
   size_t currentLength = strlen(connectText);
-
   for (uint8_t i = 0; i < state; i++)
   {
     // Checking space
@@ -60,35 +50,28 @@ void Screen::connecting(uint8_t state)
     }
   }
 
-  // Displaying connecting text and setup bar.
   _screen->clearBuffer();
-  const auto setupPadding = setupHeader();
-
-  // Reactive Component
-  connectingWindow.Update(0, connectText);
+  // Component
+  connectingWindow.Update(1, connectText);
+  connectingWindow.Display();
   // Displaying
-  connectingWindow.Display(StyleHeight::CENTERED, setupPadding);
   _screen->sendBuffer();
 }
 
 void Screen::connected(const char *ipaddress, uint8_t timing)
 {
-
-  // Displaying connecting text and setup bar.
   _screen->clearBuffer();
-  const auto setupPadding = setupHeader();
+  // Component
+  connectedWindow.Update(3, ipaddress);
 
-  // Reactive Component
-  connectedWindow.Update(2, ipaddress);
   // Displaying
-  connectedWindow.Display(StyleHeight::CENTERED, setupPadding, 4);
-  
-  // Creating loading timing
-  if(timing !=0)
+  connectedWindow.Display();
+  // Creating loading bar
+  if (timing != 0)
   {
     _screen->setFont(u8g2_font_3x3basic_tr);
     _loading.concat(" ");
-    _screen->drawButtonUTF8(0, _screen->getDisplayHeight()-5, U8G2_BTN_INV, _screen->getStrWidth(_loading.c_str()), 0, 0, _loading.c_str());
+    _screen->drawButtonUTF8(0, _screen->getDisplayHeight() - 5, U8G2_BTN_INV, _screen->getStrWidth(_loading.c_str()), 0, 0, _loading.c_str());
     _screen->setFont(_font);
   }
   _screen->sendBuffer();
@@ -97,10 +80,9 @@ void Screen::connected(const char *ipaddress, uint8_t timing)
 void Screen::loop()
 {
   _screen->clearBuffer();
-  _screen->setFont(_font);
-
-  loopWindow.Display(StyleHeight::CENTERED);
-
+  // Component
+  loopWindow.Display();
+  // Displaying
   _screen->sendBuffer();
 }
 

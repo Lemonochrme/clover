@@ -34,9 +34,6 @@ namespace Display
         ~Screen();
         Screen(const Screen &) = delete;
         Screen &operator=(const Screen &) = delete;
-
-        // Fonctions
-        uint16_t setupHeader(const uint16_t w_padding = 2, const uint16_t h_padding = 5);
         
         // Variables
         U8G2_SSD1306_128X64_NONAME_F_HW_I2C *_screen;
@@ -46,6 +43,7 @@ namespace Display
         String _loading;
 
         // Static Components
+        TextBox headerSetup;
         Components connectingWindow;
         Components connectedWindow;
         Components loopWindow;
