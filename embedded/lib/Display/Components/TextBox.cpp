@@ -4,11 +4,12 @@
 using namespace Display;
 
 TextBox::TextBox()
+    : Box(StyleHeight::UNDEFINED, 0)
 {
 }
 
 TextBox::TextBox(String str, StyleWidth sw, StyleHeight sh, u8g2_uint_t style, u8g2_uint_t w_padding, u8g2_uint_t h_padding, bool takeWholeLine)
-    : _text(str), _style(style), _paddingWidth(w_padding), _paddingHeight(h_padding), _styleWidth(sw), _styleHeight(sh), _takeWholeLine(takeWholeLine)
+    : Box(sh, h_padding), _text(str), _style(style), _paddingWidth(w_padding), _styleWidth(sw), _takeWholeLine(takeWholeLine)
 {
     Calculate();
 }
@@ -35,7 +36,7 @@ void TextBox::Calculate()
         _x = width - _textWidth;
         break;
     default:
-        _x=0;
+        _x = 0;
     }
 }
 
@@ -44,21 +45,18 @@ void TextBox::Display(size_t size, size_t position, u8g2_uint_t offsetY)
     const auto centeredOffset = (Screen::GetInstance().getHeight() - size);
     // Later will be used with padding/margin
     const auto x = (_styleWidth == StyleWidth::CENTERED) ? _x : _x;
-    switch (_styleHeight)
+    switch (this->_styleHeight)
     {
     case StyleHeight::TOP:
-        Screen::GetInstance().getScreen().drawButtonUTF8(_paddingWidth + x, (position + 1) * FONT_SIZE + offsetY, _style, _textWidth, _paddingHeight, _paddingWidth, _text.c_str());
+        Screen::GetInstance().getScreen().drawButtonUTF8(_paddingWidth + x, (position + 1) * FONT_SIZE + offsetY, _style, _textWidth, this->_paddingHeight, _paddingWidth, _text.c_str());
         break;
     case StyleHeight::CENTERED:
-        Screen::GetInstance().getScreen().drawButtonUTF8(_paddingWidth + x, static_cast<uint16_t>((centeredOffset / 2)) + (position + 1) * FONT_SIZE + offsetY, _style, _textWidth, _paddingHeight, _paddingWidth, _text.c_str());
+        Screen::GetInstance().getScreen().drawButtonUTF8(_paddingWidth + x, static_cast<uint16_t>((centeredOffset / 2)) + (position + 1) * FONT_SIZE + offsetY, _style, _textWidth, this->_paddingHeight, _paddingWidth, _text.c_str());
         break;
     case StyleHeight::BOTTOM:
-        Screen::GetInstance().getScreen().drawButtonUTF8(_paddingWidth + x, centeredOffset + (position + 1) * FONT_SIZE + offsetY, _style, _textWidth, _paddingHeight, _paddingWidth, _text.c_str());
+        Screen::GetInstance().getScreen().drawButtonUTF8(_paddingWidth + x, centeredOffset + (position + 1) * FONT_SIZE + offsetY, _style, _textWidth, this->_paddingHeight, _paddingWidth, _text.c_str());
         break;
     default:
         break;
     }
 }
-
-StyleHeight TextBox::getStyleHeight() { return _styleHeight; }
-u8g2_uint_t TextBox::getPadding() { return _paddingHeight; }
