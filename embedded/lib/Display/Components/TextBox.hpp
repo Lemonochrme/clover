@@ -22,7 +22,13 @@ namespace Display
          */
         TextBox(String str, StyleWidth sw, StyleHeight sh, u8g2_uint_t style, u8g2_uint_t w_padding = 0, u8g2_uint_t h_padding = 0, bool takeWholeLine = false);
         void Display(size_t size, size_t position, u8g2_uint_t offsetY) override;
-        void Update(String str) override;
+        
+        /**
+         * @brief Updates String data
+         * 
+         * @param data String
+         */
+        void Update(std::any data) override;
 
     private:
         /**

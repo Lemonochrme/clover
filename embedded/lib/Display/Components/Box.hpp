@@ -1,6 +1,7 @@
 #ifndef _HEADER_DISPLAY_BOX
 #define _HEADER_DISPLAY_BOX
 #include <U8g2lib.h>
+#include <any>
 
 namespace Display
 {
@@ -63,11 +64,10 @@ namespace Display
         /**
          * @brief Will update by recalculating the 'Box' constants
          * with the given argument.
-         * ! Will be modified in the near future to accept a template, or an std::any
          *
-         * @param str
+         * @param data the data to modify, depending on the Box type
          */
-        virtual void Update(String str){};
+        virtual void Update(std::any data){};
 
         /**
          * @brief Get the Style Height, logic can be changed.

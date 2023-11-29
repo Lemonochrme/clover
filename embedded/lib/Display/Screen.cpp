@@ -2,6 +2,10 @@
 #include <vector>
 #include <memory>
 
+// XBM Files
+#include "Components/SpriteBox.hpp"
+#include "../Pictures/clover.xbm"
+
 using namespace Display;
 
 Screen::Screen()
@@ -30,7 +34,7 @@ void Screen::Setup(uint8_t *font)
                        std::make_shared<TextBox>(TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
                        std::make_shared<TextBox>(TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
                        std::make_shared<TextBox>(TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2))});
-  loopWindow.Add(std::make_shared<TextBox>(TextBox("Hello, Plant!", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW1)));
+  loopWindow.Add(std::make_shared<SpriteBox>(SpriteBox(clover_bits,clover_height,clover_width)));
 }
 
 void Screen::connecting(uint8_t state)

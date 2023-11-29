@@ -14,9 +14,9 @@ TextBox::TextBox(String str, StyleWidth sw, StyleHeight sh, u8g2_uint_t style, u
     Calculate();
 }
 
-void TextBox::Update(String str)
+void TextBox::Update(std::any data)
 {
-    _text = str;
+    _text = std::any_cast<String>(data);
     Calculate();
 }
 
