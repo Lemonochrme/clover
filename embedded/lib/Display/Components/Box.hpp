@@ -5,11 +5,6 @@
 
 namespace Display
 {
-    /** Size of the actual font from Screen. Used for many calculations
-     * ! Must be changed if the _font size is updated
-     */
-    constexpr uint8_t FONT_SIZE = 8;
-
     /**
      * @brief Where each Box element is centered on the x axis.
      */
@@ -47,8 +42,8 @@ namespace Display
         /**
          * @brief Construct a new Box object, can be ignored.
          */
-        Box(StyleHeight sh, u8g2_uint_t h_padding)
-            : _styleHeight(sh), _paddingHeight(h_padding){};
+        Box(StyleHeight sh, u8g2_uint_t h_padding, uint16_t height)
+            : _styleHeight(sh), _paddingHeight(h_padding), _height(height) {};
 
         /**
          * @brief Used to display the element on the screen.
@@ -56,10 +51,10 @@ namespace Display
          * ! Maybe a font will be added to arguments next...
          *
          * @param size the total size of the elements from a styleheight
-         * @param position the actual position of the element depending of the previous size
+         * @param size_pos all the above sizes from each components in a same style height
          * @param offsetY an offset in Y, given by the 'Components'
          */
-        virtual void Display(size_t size, size_t position, u8g2_uint_t offsetY){};
+        virtual void Display(size_t size, size_t size_pos, u8g2_uint_t offsetY){};
 
         /**
          * @brief Will update by recalculating the 'Box' constants
@@ -84,9 +79,12 @@ namespace Display
          */
         virtual u8g2_uint_t getPadding() { return _paddingHeight; };
 
+        virtual uint16_t getHeight() { return _height; }
+
     protected:
         StyleHeight _styleHeight;
         u8g2_uint_t _paddingHeight;
+        uint16_t _height;
     };
 }
 

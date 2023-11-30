@@ -27,22 +27,22 @@ void Components::Update(size_t index, String text)
 
 void Components::Display()
 {
-    size_t i(0);
+    size_t totalSize(0);
     u8g2_uint_t verticalPadding(0);
     for (auto it = _boxes.begin(); it != _boxes.end(); it++)
     {
         const auto size_boxes = GetSize((*it)->getStyleHeight());
-        (*it)->Display(size_boxes, i, verticalPadding);
+        (*it)->Display(size_boxes, totalSize, verticalPadding);
         // Index and verticalPadding only incrementing for the same style. (eg : it and it+1 as the same style.)
         if (it + 1 != _boxes.end() && ((*(it+1))->getStyleHeight() == (*it)->getStyleHeight()))
         {
             verticalPadding += (*it)->getPadding();
-            i++;
+            totalSize += (*it)->getHeight();
         }
         else
         {
             verticalPadding = 0;
-            i = 0;
+            totalSize = 0;
         }
     }
 }
@@ -52,6 +52,6 @@ size_t Components::GetSize(StyleHeight sh)
     size_t returnSize(0);
     // returnSize is equal to FONT_SIZE + vertical padding * boxes with style sh
     for(auto& box : _boxes)
-        returnSize += (box->getStyleHeight() == sh ? (FONT_SIZE+box->getPadding()) : 0);
+        returnSize += (box->getStyleHeight() == sh ? (box->getHeight()+box->getPadding()) : 0);
     return returnSize;
 }

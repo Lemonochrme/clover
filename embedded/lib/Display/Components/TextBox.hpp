@@ -4,6 +4,10 @@
 
 namespace Display
 {
+    /** Size of the actual font from Screen. Used for many calculations
+     * ! Must be changed if the _font size is updated
+     */
+    constexpr uint8_t FONT_SIZE = 8;
 
     class TextBox : public Box
     {
@@ -21,7 +25,7 @@ namespace Display
          * @param takeWholeLine if true, the button takes the whole line
          */
         TextBox(String str, StyleWidth sw, StyleHeight sh, u8g2_uint_t style, u8g2_uint_t w_padding = 0, u8g2_uint_t h_padding = 0, bool takeWholeLine = false);
-        void Display(size_t size, size_t position, u8g2_uint_t offsetY) override;
+        void Display(size_t size, size_t size_pos, u8g2_uint_t offsetY) override;
         
         /**
          * @brief Updates String data

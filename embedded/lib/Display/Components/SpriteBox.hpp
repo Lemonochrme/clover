@@ -14,8 +14,8 @@ namespace Display
          *
          * @param sprite array from an .xbm format
          */
-        SpriteBox(unsigned char *sprite, uint16_t width, uint16_t height, u8g2_uint_t x=0, u8g2_uint_t y=0);
-        void Display(size_t size, size_t position, u8g2_uint_t offsetY) override;
+        SpriteBox(unsigned char *sprite, uint16_t width, uint16_t height, StyleWidth sw, StyleHeight sh);
+        void Display(size_t size, size_t size_pos, u8g2_uint_t offsetY) override;
         
         /**
          * @brief Updates sprite
@@ -25,11 +25,12 @@ namespace Display
         void Update(std::any data) override;
 
     private:
+        void Calculate();
         unsigned char* _sprite;
+        StyleWidth _styleWidth;
         uint16_t _width;
         uint16_t _height;
-        u8g2_uint_t _x;
-        u8g2_uint_t _y;
+        uint16_t _x;
     };
 }
 
