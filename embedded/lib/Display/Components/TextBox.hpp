@@ -25,7 +25,7 @@ namespace Display
          * @param takeWholeLine if true, the button takes the whole line
          */
         TextBox(String str, StyleWidth sw, StyleHeight sh, u8g2_uint_t style, u8g2_uint_t w_padding = 0, u8g2_uint_t h_padding = 0, bool takeWholeLine = false);
-        void Display(size_t size, size_t size_pos, u8g2_uint_t offsetY) override;
+        void Display(u8g2_uint_t size, u8g2_uint_t size_pos) override;
         
         /**
          * @brief Updates String data

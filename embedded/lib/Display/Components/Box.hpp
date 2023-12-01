@@ -51,10 +51,9 @@ namespace Display
          * ! Maybe a font will be added to arguments next...
          *
          * @param size the total size of the elements from a styleheight
-         * @param size_pos all the above sizes from each components in a same style height
-         * @param offsetY an offset in Y, given by the 'Components'
+         * @param size_pos all the above sizes from each components in a same style height plus its height padding
          */
-        virtual void Display(size_t size, size_t size_pos, u8g2_uint_t offsetY){};
+        virtual void Display(u8g2_uint_t size, u8g2_uint_t size_pos){};
 
         /**
          * @brief Will update by recalculating the 'Box' constants
