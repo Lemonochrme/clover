@@ -1,4 +1,5 @@
-# clover
+### CLOVER IoT PLANT MANAGER
 
 
-![clover-logo](https://github.com/Lemonochrme/clover/assets/80280962/e5e307cf-ada0-42fe-b5bc-df2d2ec72e07)
+
+![clover-logo](https://github.com/Lemonochrme/clover/assets/80280962/1eb92c30-95e5-4e0f-9755-5af545f36108)
