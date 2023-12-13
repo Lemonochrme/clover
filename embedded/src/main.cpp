@@ -28,6 +28,13 @@ void loop()
     auto& dataHandler = DataHandler::GetInstance();
     auto& screen = Display::Screen::GetInstance();
 
+    // If could not connect, show screen failure
+    if(!serverHandler.isConnected())
+    {
+        screen.notConnected();
+        return;
+    }
+
     // If serverHandler finished showing ip.
     if (serverHandler.showNext())
         screen.loop();

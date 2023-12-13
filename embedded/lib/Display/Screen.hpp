@@ -19,7 +19,8 @@ namespace Display
         }
         // Public functions
         void Setup(uint8_t *font);
-        void connecting(uint8_t state = 0);
+        void connecting(uint8_t state=0);
+        void notConnected();
         void connected(const char *ipaddress, uint8_t timing);
         void loop();
         // Getters
@@ -44,6 +45,7 @@ namespace Display
         // Static Components
         TextBox headerSetup;
         Components connectingWindow;
+        Components connectionfailedWindow;
         Components connectedWindow;
         Components loopWindow;
     };

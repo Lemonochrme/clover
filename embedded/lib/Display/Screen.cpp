@@ -5,6 +5,7 @@
 // XBM Files
 #include "Components/SpriteBox.hpp"
 #include "../Pictures/clover.xbm"
+#include "../Pictures/failed.xbm"
 
 using namespace Display;
 
@@ -30,11 +31,14 @@ void Screen::Setup(uint8_t *font)
   // Static Components
   connectingWindow.Add({std::make_shared<TextBox>(headerSetup),
                         std::make_shared<TextBox>(TextBox("connect", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0))});
+  connectionfailedWindow.Add({std::make_shared<TextBox>(headerSetup),
+    std::make_shared<TextBox>(TextBox("Failed to connect.", StyleWidth::RIGHT, StyleHeight::CENTERED, U8G2_BTN_BW0,3)),
+    std::make_shared<SpriteBox>(SpriteBox(failed_bits,failed_height,failed_width,StyleWidth::LEFT,StyleHeight::FORCE_CENTERED))});
   connectedWindow.Add({std::make_shared<TextBox>(headerSetup),
                        std::make_shared<TextBox>(TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
                        std::make_shared<TextBox>(TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
                        std::make_shared<TextBox>(TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2))});
-  loopWindow.Add(std::make_shared<SpriteBox>(SpriteBox(clover_bits,clover_height,clover_width,StyleWidth::CENTERED,StyleHeight::CENTERED)));
+  loopWindow.Add(std::make_shared<SpriteBox>(SpriteBox(clover_bits, clover_height, clover_width, StyleWidth::CENTERED, StyleHeight::CENTERED)));
 }
 
 void Screen::connecting(uint8_t state)
@@ -59,6 +63,15 @@ void Screen::connecting(uint8_t state)
   // Component
   connectingWindow.Update(1, connectText);
   connectingWindow.Display();
+  // Displaying
+  _screen->sendBuffer();
+}
+
+void Screen::notConnected()
+{
+  _screen->clearBuffer();
+  // Component
+  connectionfailedWindow.Display();
   // Displaying
   _screen->sendBuffer();
 }

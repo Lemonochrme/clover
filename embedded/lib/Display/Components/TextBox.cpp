@@ -46,6 +46,7 @@ void TextBox::Display(u8g2_uint_t size, u8g2_uint_t size_pos)
     switch (this->_styleHeight)
     {
     case StyleHeight::CENTERED:
+    case StyleHeight::FORCE_CENTERED:
         Screen::GetInstance().getScreen().drawButtonUTF8(_paddingWidth + _x, static_cast<uint16_t>((centeredOffset / 2)) + size_pos + _height, _style, _textWidth, this->_paddingHeight, _paddingWidth, _text.c_str());
         break;
     case StyleHeight::BOTTOM:

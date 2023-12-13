@@ -26,11 +26,12 @@ namespace Display
         UNDEFINED,
         TOP,
         CENTERED,
-        BOTTOM
+        BOTTOM,
+        FORCE_CENTERED
     };
 
     /**
-     * @brief Box is a virtual class which can be derived into many box elements
+     * @brief Box is an abstract class which can be derived into many box elements
      * and will be used in the 'Components' object.
      * It is composed of 4 functions which may or not be used.
      * Each box should use the Screen Interface in the Display function,

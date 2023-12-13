@@ -32,8 +32,10 @@ void Components::Display()
     {
         const auto size_boxes = GetSize((*it)->getStyleHeight());
         (*it)->Display(size_boxes, totalSize);
-        // Index and verticalPadding only incrementing for the same style. (eg : it and it+1 as the same style.)
-        if (it + 1 != _boxes.end() && ((*(it+1))->getStyleHeight() == (*it)->getStyleHeight()))
+
+        /*  Index and verticalPadding only incrementing for the same style. (eg : it and it+1 as the same style.)
+            Plus, it has to not be FORCED to be incremented.*/
+        if (it + 1 != _boxes.end() && ((*(it+1))->getStyleHeight() == (*it)->getStyleHeight()) && ((*it)->getStyleHeight() != StyleHeight::FORCE_CENTERED))
             totalSize += (*it)->getHeight() + (2*(*it)->getPadding());
         else
             totalSize = 0;

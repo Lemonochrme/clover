@@ -45,6 +45,7 @@ void SpriteBox::Display(u8g2_uint_t size, u8g2_uint_t size_pos)
     switch(this->_styleHeight)
     {
     case StyleHeight::CENTERED:
+    case StyleHeight::FORCE_CENTERED:
         // idk must be the size of all the above 
         Screen::GetInstance().getScreen().drawXBM(_x, static_cast<uint16_t>((centeredOffset / 2)) + size_pos,_width,_height,_sprite);
         break;

@@ -7,6 +7,7 @@
 #include "DataHandler.hpp"
 
 constexpr uint8_t MAX_TIME = 28;
+constexpr uint16_t MAX_CONNECT_TRIES = 20;
 
 class ServerHandler {
 public:
@@ -21,6 +22,7 @@ public:
     void loop();
     // Return if the screen needs to be changed.
     bool showNext();
+    bool isConnected();
 
 private:
     // Singleton
@@ -32,6 +34,7 @@ private:
     void handleRoot();
     ESP8266WebServer server;
     uint8_t display_time;
+    bool _connected;
 };
 
 #endif
