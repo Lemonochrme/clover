@@ -7,7 +7,7 @@
 
 using namespace Display;
 
-Screen::Screen() : _booted(0), _bootFrame(0)
+Screen::Screen() : _bootFrame(0), _booted(0)
 {
   _screen = new U8G2_SSD1306_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, SCL, SDA);
   _screen->begin();
@@ -36,7 +36,7 @@ void Screen::Setup(uint8_t *font)
                        std::make_shared<TextBox>(TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
                        std::make_shared<TextBox>(TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
                        std::make_shared<TextBox>(TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2))});
-  bootWindow.Add(std::make_shared<SpriteBox>(SpriteBox(clover_frames[0].data, clover_frames[0].height, clover_frames[0].width, StyleWidth::CENTERED, StyleHeight::CENTERED)));
+  bootWindow.Add(std::make_shared<SpriteBox>(SpriteBox(CLOVER_FRAMES[0].data, CLOVER_FRAMES[0].height, CLOVER_FRAMES[0].width, StyleWidth::CENTERED, StyleHeight::CENTERED)));
   loopWindow.Add(std::make_shared<TextBox>(TextBox("Welcome to Clover!", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)));
 }
 
@@ -100,7 +100,7 @@ void Screen::boot()
   // Component
   bootWindow.Display();
   _bootFrame++;
-  bootWindow.Update(0,clover_frames[(_bootFrame >= 10 ? 10 : _bootFrame)]);
+  bootWindow.Update(0,CLOVER_FRAMES[(_bootFrame >= 10 ? 10 : _bootFrame)]);
   _screen->sendBuffer();
 }
 
@@ -117,4 +117,4 @@ uint16_t Screen::getHeight() { return _height; }
 uint16_t Screen::getWidth() { return _width; }
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C &Screen::getScreen() { return *_screen; }
 uint16_t Screen::getTextWidth(const char *str) { return _screen->getStrWidth(str); }
-bool Screen::isBooting() { return (_bootFrame<=20); }
+bool Screen::isBooting() { return (_bootFrame<=MAX_BOOT_FRAMES); }

@@ -19,9 +19,8 @@ public:
     }
     // Public functions
     void setup(const char* ssid, const char* password); 
+    void showIp();
     void loop();
-    // Return if the screen needs to be changed.
-    bool showNext();
     bool isConnected();
     bool showBoot();
 

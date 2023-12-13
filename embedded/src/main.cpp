@@ -24,34 +24,46 @@ void setup()
 
 void loop()
 {
+    // Creating variables to access singletons
     auto& serverHandler = ServerHandler::GetInstance();
     auto& dataHandler = DataHandler::GetInstance();
     auto& screen = Display::Screen::GetInstance();
 
-    // Could not connect, show screen failure
+    // Could not connect after setup: Showing screen failure
     if(!serverHandler.isConnected())
     {
         screen.notConnected();
         return;
     }
 
-    // Is booting
+    // Server showing IP
+    if(!serverHandler.showBoot())
+    {
+        serverHandler.showIp();
+        delay(250);
+        return;
+    }
+
+    // When Screen can boot (isBooting) and Server finished showing IP (showBoot)
     if(screen.isBooting() && serverHandler.showBoot())
     {
         screen.boot();
-        delay(166);
+        delay(100);
+        return;
     }
 
-    // If serverHandler finished showing ip.
-    if (!screen.isBooting())
-        screen.loop();
-
-    dataHandler.updateTemperatureData(random(1800, 2200) / 100.0);
+    // Data gathered from various sensors
     // 0 -> air(0), 0-300 -> dry(20), 300-700 -> humid (580), 700-950 -> water(940)
-    dataHandler.updateHumidityData(static_cast<float>(std::any_cast<int>(humidity.getValue())));
-    Serial.println(dataHandler.getJsonData());
-    // When showing IP, delay is faster.
-    delay(serverHandler.showNext() ? 0 : 250);
+    auto humidityData = static_cast<float>(std::any_cast<int>(humidity.getValue()));
+    auto temperatureData = random(300, 150) / 10.0;
 
+    // Updating the data handler
+    dataHandler.updateTemperatureData(temperatureData);
+    dataHandler.updateHumidityData(humidityData);
+    // (debug) Printing to serial the data
+    Serial.println(dataHandler.getJsonData());
+    // Screen showing
+    screen.loop();
+    // Server sending data
     serverHandler.loop();
 }

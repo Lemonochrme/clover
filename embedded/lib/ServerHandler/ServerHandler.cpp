@@ -34,15 +34,15 @@ void ServerHandler::setup(const char *ssid, const char *password)
 
 void ServerHandler::loop()
 {
-    if (display_time < MAX_TIME)
-    {
-        Display::Screen::GetInstance().connected(WiFi.localIP().toString().c_str(), display_time);
-        display_time++;
-    }
     server.handleClient();
 }
 
-bool ServerHandler::showNext() { return (display_time >= MAX_TIME); }
+void ServerHandler::showIp()
+{
+    Display::Screen::GetInstance().connected(WiFi.localIP().toString().c_str(), display_time);
+    display_time++;
+}
+
 bool ServerHandler::isConnected() { return _connected; }
 bool ServerHandler::showBoot() { return (display_time >= MAX_TIME); }
 

@@ -22,7 +22,7 @@
 
 namespace Display
 {
-    constexpr Picture clover_frames[] = {
+    constexpr Picture CLOVER_FRAMES[] = {
         {clover1_bits, clover1_width, clover1_height},
         {clover2_bits, clover2_width, clover2_height},
         {clover3_bits, clover3_width, clover3_height},
@@ -35,6 +35,7 @@ namespace Display
         {clover10_bits, clover10_width, clover10_height},
         {clover11_bits, clover11_width, clover11_height},
     };
+    constexpr uint8_t MAX_BOOT_FRAMES = 25;
 
     class Screen
     {
