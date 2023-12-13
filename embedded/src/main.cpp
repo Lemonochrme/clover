@@ -46,7 +46,7 @@ void loop()
 
     // If serverHandler finished showing ip.
     if (serverHandler.showNext()) {
-        //screen.loop(); -> Cause des problèmes
+        screen.loop();
     }
 
     SoilHumidity = static_cast<float>(std::any_cast<int>(humidity.getValue()));
@@ -59,7 +59,7 @@ void loop()
         Serial.println("Soil humidity low. Please water the plant.");
         digitalWrite(D5, HIGH);
     } else if (SoilHumidity >= 550 && SoilHumidity <= 680) {
-        Serial.println("Perfect soil moisture condition. Idle...");
+        Serial.println("Idle...");
         digitalWrite(D5, LOW);
     } else {
         Serial.println("Soil too wet.");
@@ -68,8 +68,6 @@ void loop()
         digitalWrite(D5, HIGH);
         delay(400);
     }
-
-
 
     // When showing IP, delay is faster.
     delay(serverHandler.showNext() ? 1000 : 250);

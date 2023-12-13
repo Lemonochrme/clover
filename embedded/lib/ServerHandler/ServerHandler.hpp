@@ -23,7 +23,6 @@ public:
     // Return if the screen needs to be changed.
     bool showNext();
     bool isConnected();
-
 private:
     // Singleton
     ServerHandler();
