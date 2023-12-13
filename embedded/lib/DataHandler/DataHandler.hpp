@@ -11,11 +11,12 @@ public:
         static DataHandler instance;
         return instance;
     }
+
     // Public functions
     String getJsonData();
     void updateTemperatureData(float temperature);
     void updateHumidityData(float humidity);
-        
+    
 private:
     // Singleton
     DataHandler();

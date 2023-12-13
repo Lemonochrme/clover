@@ -15,11 +15,20 @@
 
 Component humidity(ComponentType::Analog, PIN_A0);
 
+float SoilHumidity;
+float Temperature;
+
 void setup()
 {
     Serial.begin(9600);
     Display::Screen::GetInstance().Setup(const_cast<uint8_t*>(u8g2_font_busdisplay8x5_tr));
     ServerHandler::GetInstance().setup(ssid, pswd);
+
+    Serial.print("Connected to WiFi. IP address: ");
+    Serial.println(WiFi.localIP());
+
+    pinMode(D5, OUTPUT);
+    digitalWrite(D5, LOW);
 }
 
 void loop()
@@ -36,15 +45,33 @@ void loop()
     }
 
     // If serverHandler finished showing ip.
-    if (serverHandler.showNext())
-        screen.loop();
+    if (serverHandler.showNext()) {
+        //screen.loop(); -> Cause des problèmes
+    }
 
-    dataHandler.updateTemperatureData(random(1800, 2200) / 100.0);
-    // 0 -> air(0), 0-300 -> dry(20), 300-700 -> humid (580), 700-950 -> water(940)
-    dataHandler.updateHumidityData(static_cast<float>(std::any_cast<int>(humidity.getValue())));
-    Serial.println(dataHandler.getJsonData());
+    SoilHumidity = static_cast<float>(std::any_cast<int>(humidity.getValue()));
+    Temperature = random(1800, 2200) / 100.0;
+
+    dataHandler.updateTemperatureData(Temperature);
+    dataHandler.updateHumidityData(SoilHumidity);
+    
+    if (SoilHumidity < 550) {
+        Serial.println("Soil humidity low. Please water the plant.");
+        digitalWrite(D5, HIGH);
+    } else if (SoilHumidity >= 550 && SoilHumidity <= 680) {
+        Serial.println("Perfect soil moisture condition. Idle...");
+        digitalWrite(D5, LOW);
+    } else {
+        Serial.println("Soil too wet.");
+        digitalWrite(D5, LOW);
+        delay(400);
+        digitalWrite(D5, HIGH);
+        delay(400);
+    }
+
+
+
     // When showing IP, delay is faster.
     delay(serverHandler.showNext() ? 1000 : 250);
-
     serverHandler.loop();
 }
