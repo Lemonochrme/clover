@@ -54,16 +54,20 @@ void loop()
 
     // Data gathered from various sensors
     // 0 -> air(0), 0-300 -> dry(20), 300-700 -> humid (580), 700-950 -> water(940)
-    auto humidityData = static_cast<float>(std::any_cast<int>(humidity.getValue()));
-    auto temperatureData = random(300, 150) / 10.0;
+    auto plantHumidityData = static_cast<float>(std::any_cast<int>(humidity.getValue()));
+    auto airTemperatureData = random(150, 300) / 10.0;
+    auto airHumidityData = random(0, 1000) / 10.0;
+    auto lightData = random(0, 1000) / 10.0;
 
     // Updating the data handler
-    dataHandler.updateTemperatureData(temperatureData);
-    dataHandler.updateHumidityData(humidityData);
+    dataHandler.updatePlantHumidityData(plantHumidityData);
+    dataHandler.updateAirTemperatureData(airTemperatureData);
+    dataHandler.updateAirHumidityData(airHumidityData);
+    dataHandler.updateLightData(lightData);
     // (debug) Printing to serial the data
     Serial.println(dataHandler.getJsonData());
     // Screen showing
-    screen.loop();
+    screen.loop(plantHumidityData,airTemperatureData,airHumidityData,lightData);
     // Server sending data
     serverHandler.loop();
 }

@@ -37,7 +37,10 @@ void Screen::Setup(uint8_t *font)
                        std::make_shared<TextBox>(TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
                        std::make_shared<TextBox>(TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2))});
   bootWindow.Add(std::make_shared<SpriteBox>(SpriteBox(CLOVER_FRAMES[0].data, CLOVER_FRAMES[0].height, CLOVER_FRAMES[0].width, StyleWidth::CENTERED, StyleHeight::CENTERED)));
-  loopWindow.Add(std::make_shared<TextBox>(TextBox("Welcome to Clover!", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)));
+  loopWindow.Add({std::make_shared<TextBox>(TextBox("plantHumidity", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
+                  std::make_shared<TextBox>(TextBox("airTemperature", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
+                  std::make_shared<TextBox>(TextBox("airHumidity", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
+                  std::make_shared<TextBox>(TextBox("light", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2))});
 }
 
 void Screen::connecting(uint8_t state)
@@ -104,9 +107,14 @@ void Screen::boot()
   _screen->sendBuffer();
 }
 
-void Screen::loop()
+void Screen::loop(const float plantHumidity, const float airTemperature, const float airHumidity, const float light)
 {
   _screen->clearBuffer();
+  // Updating with values
+  loopWindow.Update(0,String("Humidity: ")+String(plantHumidity,2)+String("%"));
+  loopWindow.Update(1,String("Air Temperature: ")+String(airTemperature,2)+String("°C"));
+  loopWindow.Update(2,String("Air Humidity: ")+String(airHumidity,2)+String("%"));
+  loopWindow.Update(3,String("Light: ")+String(light,2)+String("%"));
   // Component
   loopWindow.Display();
   // Displaying

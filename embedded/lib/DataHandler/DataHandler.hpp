@@ -13,8 +13,10 @@ public:
     }
     // Public functions
     String getJsonData();
-    void updateTemperatureData(float temperature);
-    void updateHumidityData(float humidity);
+    void updatePlantHumidityData(float humidity);
+    void updateAirTemperatureData(float temperature);
+    void updateAirHumidityData(float humidity);
+    void updateLightData(float light);
         
 private:
     // Singleton
@@ -22,8 +24,14 @@ private:
     ~DataHandler();
     DataHandler(const DataHandler&) = delete;
     DataHandler& operator=(const DataHandler&) = delete;
-    float temperature;
-    float humidity;
+
+    // Variables
+    float plantHumidity;
+    float airTemperature;
+    float airHumidity;
+    float light;
+
+    // Fonctions
     String buildJson();
 };
 

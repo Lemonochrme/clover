@@ -4,13 +4,10 @@ DataHandler::DataHandler() {}
 
 DataHandler::~DataHandler() {}
 
-void DataHandler::updateTemperatureData(float temp) {
-    temperature = temp;
-}
-
-void DataHandler::updateHumidityData(float hum) {
-    humidity = hum;
-}
+void DataHandler::updatePlantHumidityData(float humidity) { plantHumidity = humidity; }
+void DataHandler::updateAirTemperatureData(float temperature) { airTemperature = temperature; }
+void DataHandler::updateAirHumidityData(float humidity) { airHumidity = humidity; }
+void DataHandler::updateLightData(float light) { this->light = light; }
 
 String DataHandler::getJsonData() {
     return buildJson();
@@ -18,8 +15,10 @@ String DataHandler::getJsonData() {
 
 String DataHandler::buildJson() {
     StaticJsonDocument<200> document; // Taille = 200
-    document["temperature"] = temperature;
-    document["humidity"] = humidity;
+    document["plantHumidity"] = plantHumidity;
+    document["airTemperature"] = airTemperature;
+    document["airHumidity"] = airHumidity;
+    document["light"] = light;
 
     String jsonFormattedData;
     serializeJson(document, jsonFormattedData);

@@ -52,7 +52,7 @@ namespace Display
         void notConnected();
         void connected(const char *ipaddress, uint8_t timing);
         void boot();
-        void loop();
+        void loop(const float plantHumidity, const float airTemperature, const float airHumidity, const float light);
         // Getters
         uint16_t getHeight();
         uint16_t getWidth();
