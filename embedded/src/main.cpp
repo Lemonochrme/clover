@@ -28,15 +28,22 @@ void loop()
     auto& dataHandler = DataHandler::GetInstance();
     auto& screen = Display::Screen::GetInstance();
 
-    // If could not connect, show screen failure
+    // Could not connect, show screen failure
     if(!serverHandler.isConnected())
     {
         screen.notConnected();
         return;
     }
 
+    // Is booting
+    if(screen.isBooting() && serverHandler.showBoot())
+    {
+        screen.boot();
+        delay(166);
+    }
+
     // If serverHandler finished showing ip.
-    if (serverHandler.showNext())
+    if (!screen.isBooting())
         screen.loop();
 
     dataHandler.updateTemperatureData(random(1800, 2200) / 100.0);
@@ -44,7 +51,7 @@ void loop()
     dataHandler.updateHumidityData(static_cast<float>(std::any_cast<int>(humidity.getValue())));
     Serial.println(dataHandler.getJsonData());
     // When showing IP, delay is faster.
-    delay(serverHandler.showNext() ? 1000 : 250);
+    delay(serverHandler.showNext() ? 0 : 250);
 
     serverHandler.loop();
 }

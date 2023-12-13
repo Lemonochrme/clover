@@ -4,6 +4,11 @@
 
 namespace Display
 {
+    struct Picture {
+        unsigned char* data;
+        uint16_t width;
+        uint16_t height;
+    };
 
     class SpriteBox : public Box
     {

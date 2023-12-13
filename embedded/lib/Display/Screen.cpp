@@ -3,13 +3,11 @@
 #include <memory>
 
 // XBM Files
-#include "Components/SpriteBox.hpp"
-#include "../Pictures/clover.xbm"
 #include "../Pictures/failed.xbm"
 
 using namespace Display;
 
-Screen::Screen()
+Screen::Screen() : _booted(0), _bootFrame(0)
 {
   _screen = new U8G2_SSD1306_128X64_NONAME_F_HW_I2C(U8G2_R0, U8X8_PIN_NONE, SCL, SDA);
   _screen->begin();
@@ -38,7 +36,8 @@ void Screen::Setup(uint8_t *font)
                        std::make_shared<TextBox>(TextBox("Connected to Wi-Fi !", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
                        std::make_shared<TextBox>(TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
                        std::make_shared<TextBox>(TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2))});
-  loopWindow.Add(std::make_shared<SpriteBox>(SpriteBox(clover_bits, clover_height, clover_width, StyleWidth::CENTERED, StyleHeight::CENTERED)));
+  bootWindow.Add(std::make_shared<SpriteBox>(SpriteBox(clover_frames[0].data, clover_frames[0].height, clover_frames[0].width, StyleWidth::CENTERED, StyleHeight::CENTERED)));
+  loopWindow.Add(std::make_shared<TextBox>(TextBox("Welcome to Clover!", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)));
 }
 
 void Screen::connecting(uint8_t state)
@@ -61,7 +60,7 @@ void Screen::connecting(uint8_t state)
 
   _screen->clearBuffer();
   // Component
-  connectingWindow.Update(1, connectText);
+  connectingWindow.Update(1, String(connectText));
   connectingWindow.Display();
   // Displaying
   _screen->sendBuffer();
@@ -80,7 +79,7 @@ void Screen::connected(const char *ipaddress, uint8_t timing)
 {
   _screen->clearBuffer();
   // Component
-  connectedWindow.Update(3, ipaddress);
+  connectedWindow.Update(3, String(ipaddress));
 
   // Displaying
   connectedWindow.Display();
@@ -92,6 +91,16 @@ void Screen::connected(const char *ipaddress, uint8_t timing)
     _screen->drawButtonUTF8(0, _screen->getDisplayHeight() - 5, U8G2_BTN_INV, _screen->getStrWidth(_loading.c_str()), 0, 0, _loading.c_str());
     _screen->setFont(_font);
   }
+  _screen->sendBuffer();
+}
+
+void Screen::boot()
+{
+  _screen->clearBuffer();
+  // Component
+  bootWindow.Display();
+  _bootFrame++;
+  bootWindow.Update(0,clover_frames[(_bootFrame >= 10 ? 10 : _bootFrame)]);
   _screen->sendBuffer();
 }
 
@@ -108,3 +117,4 @@ uint16_t Screen::getHeight() { return _height; }
 uint16_t Screen::getWidth() { return _width; }
 U8G2_SSD1306_128X64_NONAME_F_HW_I2C &Screen::getScreen() { return *_screen; }
 uint16_t Screen::getTextWidth(const char *str) { return _screen->getStrWidth(str); }
+bool Screen::isBooting() { return (_bootFrame<=20); }

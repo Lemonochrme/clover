@@ -20,9 +20,9 @@ void Components::Add(std::vector<std::shared_ptr<Box>> boxes)
     }
 }
 
-void Components::Update(size_t index, String text)
+void Components::Update(size_t index, std::any modified)
 {
-    _boxes[index]->Update(text);
+    _boxes[index]->Update(modified);
 }
 
 void Components::Display()

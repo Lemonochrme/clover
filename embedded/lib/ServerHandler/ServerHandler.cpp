@@ -44,6 +44,7 @@ void ServerHandler::loop()
 
 bool ServerHandler::showNext() { return (display_time >= MAX_TIME); }
 bool ServerHandler::isConnected() { return _connected; }
+bool ServerHandler::showBoot() { return (display_time >= MAX_TIME); }
 
 void ServerHandler::handleRoot()
 {

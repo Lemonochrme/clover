@@ -12,7 +12,7 @@ namespace Display
         Components();
         void Add(std::shared_ptr<Box> box);
         void Add(std::vector<std::shared_ptr<Box>> boxes);
-        void Update(size_t index, String text);
+        void Update(size_t index, std::any modified);
         void Display();
     private:
         size_t GetSize(StyleHeight sh);

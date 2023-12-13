@@ -19,7 +19,10 @@ SpriteBox::SpriteBox(unsigned char *sprite, uint16_t width, uint16_t height, Sty
 
 void SpriteBox::Update(std::any data)
 {
-    _sprite = std::any_cast<unsigned char*>(data);
+    const auto pic = std::any_cast<Picture>(data);
+    _height = pic.height;
+    _width = pic.width;
+    _sprite = pic.data;
     Calculate();
 }
 
