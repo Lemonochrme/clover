@@ -5,6 +5,7 @@
 #include "ServerHandler.hpp"
 #include "Component.hpp"
 #include "LedComponent.hpp"
+#include "DHTComponent.hpp"
 #include "Screen.hpp"
 
 #ifdef SSID_CLOVER
@@ -16,6 +17,7 @@
 
 Component humidity(ComponentType::Analog, PIN_A0);
 LedComponent led(D8,D7,2);
+DHTComponent airSensor(DHT11,D3);
 
 void setup()
 {
@@ -25,10 +27,8 @@ void setup()
 
     Serial.print("Connected to WiFi. IP address: ");
     Serial.println(WiFi.localIP());
-
-    pinMode(D5, OUTPUT);
-    digitalWrite(D5, LOW);
     led.setup();
+    airSensor.setup();
 }
 
 void loop()
@@ -37,8 +37,8 @@ void loop()
     auto& serverHandler = ServerHandler::GetInstance();
     auto& dataHandler = DataHandler::GetInstance();
     auto& screen = Display::Screen::GetInstance();
-    led.setColor(0,{255,0,0});
-    led.setColor(1,{0,255,0});
+    led.setColor(0,{32,0,0});
+    led.setColor(1,{0,32,0});
 
     // Could not connect after setup: Showing screen failure
     if(!serverHandler.isConnected())
@@ -66,8 +66,8 @@ void loop()
     // Data gathered from various sensors
     // 0 -> air(0), 0-300 -> dry(20), 300-700 -> humid (580), 700-950 -> water(940)
     auto soilHumidityData = static_cast<float>(std::any_cast<int>(humidity.getValue()));
-    auto airTemperatureData = random(150, 300) / 10.0;
-    auto airHumidityData = random(0, 1000) / 10.0;
+    auto airTemperatureData = airSensor.getTemperature();
+    auto airHumidityData = airSensor.getHumidity();
     auto lightData = random(0, 1000) / 10.0;
 
     // Updating the data handler
@@ -79,18 +79,13 @@ void loop()
     // Screen showing
     screen.loop(soilHumidityData,airTemperatureData,airHumidityData,lightData);
     
+    // TODO: Add LedComponent management
     if (soilHumidityData < 550) {
         Serial.println("Soil humidity low. Please water the plant.");
-        digitalWrite(D5, HIGH);
     } else if (soilHumidityData >= 550 && soilHumidityData <= 680) {
         Serial.println("Idle...");
-        digitalWrite(D5, LOW);
     } else {
         Serial.println("Soil too wet.");
-        digitalWrite(D5, LOW);
-        delay(400);
-        digitalWrite(D5, HIGH);
-        delay(400);
     }
 
     serverHandler.loop();
