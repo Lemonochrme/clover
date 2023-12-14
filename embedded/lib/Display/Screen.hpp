@@ -36,6 +36,8 @@ namespace Display
         {clover11_bits, clover11_width, clover11_height},
     };
     constexpr uint8_t MAX_BOOT_FRAMES = 25;
+    constexpr uint8_t OFFSET_ICONS = 55;
+    constexpr uint8_t OFFSET_TEXT = 75;
 
     class Screen
     {
@@ -77,12 +79,12 @@ namespace Display
         bool _booted;
 
         // Static Components
-        TextBox headerSetup;
         Components connectingWindow;
         Components connectionfailedWindow;
         Components connectedWindow;
         Components bootWindow;
         Components loopWindow;
+        Components iconWindow;
     };
 }
 

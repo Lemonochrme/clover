@@ -45,17 +45,19 @@ void SpriteBox::Calculate()
 void SpriteBox::Display(u8g2_uint_t size, u8g2_uint_t size_pos)
 {
     const auto centeredOffset = (Screen::GetInstance().getHeight() - size);
+    auto x = _x + this->_xOffset;
+    auto y = size_pos + this->_yOffset;
     switch(this->_styleHeight)
     {
     case StyleHeight::CENTERED:
     case StyleHeight::FORCE_CENTERED:
         // idk must be the size of all the above 
-        Screen::GetInstance().getScreen().drawXBM(_x, static_cast<uint16_t>((centeredOffset / 2)) + size_pos,_width,_height,_sprite);
+        Screen::GetInstance().getScreen().drawXBM(x, static_cast<uint16_t>((centeredOffset / 2)) + y,_width,_height,_sprite);
         break;
     case StyleHeight::BOTTOM:
-        Screen::GetInstance().getScreen().drawXBM(_x, centeredOffset + size_pos,_width,_height,_sprite);
+        Screen::GetInstance().getScreen().drawXBM(x, centeredOffset + y,_width,_height,_sprite);
         break;
     default:
-        Screen::GetInstance().getScreen().drawXBM(_x, size_pos,_width,_height,_sprite);
+        Screen::GetInstance().getScreen().drawXBM(x, y,_width,_height,_sprite);
     }
 }

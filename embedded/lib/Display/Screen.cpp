@@ -4,6 +4,9 @@
 
 // XBM Files
 #include "../Pictures/failed.xbm"
+#include "../Pictures/humidity.xbm"
+#include "../Pictures/thermometer.xbm"
+#include "../Pictures/air_humidity.xbm"
 
 using namespace Display;
 
@@ -25,7 +28,23 @@ void Screen::Setup(uint8_t *font)
   _font = font;
   _screen->setFont(_font);
 
-  headerSetup = TextBox("Clover Setup", StyleWidth::LEFT, StyleHeight::TOP, U8G2_BTN_INV, 2, 5, true);
+  // Creating Boxes
+  auto headerSetup = TextBox("Clover Setup", StyleWidth::LEFT, StyleHeight::TOP, U8G2_BTN_INV, 2, 5, true);
+  auto plantHumidity = TextBox("plantHumidity", StyleWidth::LEFT, StyleHeight::TOP, U8G2_BTN_BW0, 0, 0);
+  auto airTemperature = TextBox("airTemperature", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 0);
+  auto airHumidity = TextBox("airHumidity", StyleWidth::LEFT, StyleHeight::BOTTOM, U8G2_BTN_BW0, 0, 6);
+  auto humidityPicture = SpriteBox(humidity_bits,humidity_width,humidity_height,StyleWidth::LEFT,StyleHeight::CENTERED);
+  auto thermometerPicture = SpriteBox(thermometer_bits,thermometer_width,thermometer_height,StyleWidth::LEFT,StyleHeight::CENTERED);
+  auto airHumidityPicture = SpriteBox(air_humidity_bits,air_humidity_width,air_humidity_height,StyleWidth::LEFT,StyleHeight::CENTERED);
+
+  // Config Boxes
+  plantHumidity.SetOffset(OFFSET_TEXT,12);
+  airTemperature.SetOffset(OFFSET_TEXT);
+  airHumidity.SetOffset(OFFSET_TEXT);
+  humidityPicture.SetOffset(OFFSET_ICONS);
+  thermometerPicture.SetOffset(OFFSET_ICONS);
+  airHumidityPicture.SetOffset(OFFSET_ICONS);
+  
   // Static Components
   connectingWindow.Add({std::make_shared<TextBox>(headerSetup),
                         std::make_shared<TextBox>(TextBox("connect", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0))});
@@ -37,10 +56,12 @@ void Screen::Setup(uint8_t *font)
                        std::make_shared<TextBox>(TextBox("IP address: ", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
                        std::make_shared<TextBox>(TextBox("addr", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2))});
   bootWindow.Add(std::make_shared<SpriteBox>(SpriteBox(CLOVER_FRAMES[0].data, CLOVER_FRAMES[0].height, CLOVER_FRAMES[0].width, StyleWidth::CENTERED, StyleHeight::CENTERED)));
-  loopWindow.Add({std::make_shared<TextBox>(TextBox("plantHumidity", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
-                  std::make_shared<TextBox>(TextBox("airTemperature", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
-                  std::make_shared<TextBox>(TextBox("airHumidity", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2)),
-                  std::make_shared<TextBox>(TextBox("light", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 2))});
+  loopWindow.Add({std::make_shared<TextBox>(plantHumidity),
+                  std::make_shared<TextBox>(airTemperature),
+                  std::make_shared<TextBox>(airHumidity)});
+  iconWindow.Add({std::make_shared<SpriteBox>(humidityPicture),
+                  std::make_shared<SpriteBox>(thermometerPicture),
+                  std::make_shared<SpriteBox>(airHumidityPicture)});
 }
 
 void Screen::connecting(uint8_t state)
@@ -111,12 +132,13 @@ void Screen::loop(const float plantHumidity, const float airTemperature, const f
 {
   _screen->clearBuffer();
   // Updating with values
-  loopWindow.Update(0,String("Humidity: ")+String(plantHumidity,2)+String("%"));
-  loopWindow.Update(1,String("Air Temperature: ")+String(airTemperature,2)+String("°C"));
-  loopWindow.Update(2,String("Air Humidity: ")+String(airHumidity,2)+String("%"));
-  loopWindow.Update(3,String("Light: ")+String(light,2)+String("%"));
+  loopWindow.Update(0,String("Hum: ")+String(plantHumidity,1)+String("%"));
+  loopWindow.Update(1,String("Tem: ")+String(airTemperature,1)+String("°C"));
+  loopWindow.Update(2,String("Hum: ")+String(airHumidity,1)+String("%"));
+  //loopWindow.Update(3,String("Light: ")+String(light,1)+String("%"));
   // Component
   loopWindow.Display();
+  iconWindow.Display();
   // Displaying
   _screen->sendBuffer();
 }

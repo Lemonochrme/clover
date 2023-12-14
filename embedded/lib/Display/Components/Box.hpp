@@ -44,7 +44,7 @@ namespace Display
          * @brief Construct a new Box object, can be ignored.
          */
         Box(StyleHeight sh, u8g2_uint_t h_padding, uint16_t height)
-            : _styleHeight(sh), _paddingHeight(h_padding), _height(height) {};
+            : _styleHeight(sh), _paddingHeight(h_padding), _height(height), _xOffset(0), _yOffset(0){};
 
         /**
          * @brief Used to display the element on the screen.
@@ -81,10 +81,18 @@ namespace Display
 
         virtual uint16_t getHeight() { return _height; }
 
+        virtual void SetOffset(uint16_t xOffset, uint16_t yOffset=0)
+        {
+            _xOffset = xOffset;
+            _yOffset = yOffset;
+        }
+
     protected:
         StyleHeight _styleHeight;
         u8g2_uint_t _paddingHeight;
         uint16_t _height;
+        uint16_t _xOffset;
+        uint16_t _yOffset;
     };
 }
 
