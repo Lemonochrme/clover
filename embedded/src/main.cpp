@@ -4,6 +4,7 @@
 
 #include "ServerHandler.hpp"
 #include "Component.hpp"
+#include "LedComponent.hpp"
 #include "Screen.hpp"
 
 #ifdef SSID_CLOVER
@@ -14,6 +15,7 @@
 #endif
 
 Component humidity(ComponentType::Analog, PIN_A0);
+LedComponent led(D8,D7,2);
 
 void setup()
 {
@@ -26,6 +28,7 @@ void setup()
 
     pinMode(D5, OUTPUT);
     digitalWrite(D5, LOW);
+    led.setup();
 }
 
 void loop()
@@ -34,6 +37,8 @@ void loop()
     auto& serverHandler = ServerHandler::GetInstance();
     auto& dataHandler = DataHandler::GetInstance();
     auto& screen = Display::Screen::GetInstance();
+    led.setColor(0,{255,0,0});
+    led.setColor(1,{0,255,0});
 
     // Could not connect after setup: Showing screen failure
     if(!serverHandler.isConnected())
