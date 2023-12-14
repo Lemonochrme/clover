@@ -20,6 +20,12 @@ void setup()
     Serial.begin(9600);
     Display::Screen::GetInstance().Setup(const_cast<uint8_t*>(u8g2_font_busdisplay8x5_tr));
     ServerHandler::GetInstance().setup(ssid, pswd);
+
+    Serial.print("Connected to WiFi. IP address: ");
+    Serial.println(WiFi.localIP());
+
+    pinMode(D5, OUTPUT);
+    digitalWrite(D5, LOW);
 }
 
 void loop()
@@ -54,20 +60,33 @@ void loop()
 
     // Data gathered from various sensors
     // 0 -> air(0), 0-300 -> dry(20), 300-700 -> humid (580), 700-950 -> water(940)
-    auto plantHumidityData = static_cast<float>(std::any_cast<int>(humidity.getValue()));
+    auto soilHumidityData = static_cast<float>(std::any_cast<int>(humidity.getValue()));
     auto airTemperatureData = random(150, 300) / 10.0;
     auto airHumidityData = random(0, 1000) / 10.0;
     auto lightData = random(0, 1000) / 10.0;
 
     // Updating the data handler
-    dataHandler.updatePlantHumidityData(plantHumidityData);
+    dataHandler.updateSoilMoistureData(soilHumidityData);
     dataHandler.updateAirTemperatureData(airTemperatureData);
     dataHandler.updateAirHumidityData(airHumidityData);
     dataHandler.updateLightData(lightData);
-    // (debug) Printing to serial the data
-    Serial.println(dataHandler.getJsonData());
+
     // Screen showing
-    screen.loop(plantHumidityData,airTemperatureData,airHumidityData,lightData);
-    // Server sending data
+    screen.loop(soilHumidityData,airTemperatureData,airHumidityData,lightData);
+    
+    if (soilHumidityData < 550) {
+        Serial.println("Soil humidity low. Please water the plant.");
+        digitalWrite(D5, HIGH);
+    } else if (soilHumidityData >= 550 && soilHumidityData <= 680) {
+        Serial.println("Idle...");
+        digitalWrite(D5, LOW);
+    } else {
+        Serial.println("Soil too wet.");
+        digitalWrite(D5, LOW);
+        delay(400);
+        digitalWrite(D5, HIGH);
+        delay(400);
+    }
+
     serverHandler.loop();
 }

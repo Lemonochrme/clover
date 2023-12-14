@@ -24,6 +24,7 @@ public:
     bool isConnected();
     bool showBoot();
 
+
 private:
     // Singleton
     ServerHandler();

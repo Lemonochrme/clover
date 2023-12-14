@@ -11,13 +11,13 @@ public:
         static DataHandler instance;
         return instance;
     }
+
     // Public functions
     String getJsonData();
-    void updatePlantHumidityData(float humidity);
+    void updateSoilMoistureData(float humidity);
     void updateAirTemperatureData(float temperature);
     void updateAirHumidityData(float humidity);
     void updateLightData(float light);
-        
 private:
     // Singleton
     DataHandler();
@@ -26,7 +26,7 @@ private:
     DataHandler& operator=(const DataHandler&) = delete;
 
     // Variables
-    float plantHumidity;
+    float soilMoisture;
     float airTemperature;
     float airHumidity;
     float light;
