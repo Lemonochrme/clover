@@ -3,9 +3,7 @@
 #include <ESP8266WebServer.h>
 
 #include "ServerHandler.hpp"
-#include "Component.hpp"
-#include "LedComponent.hpp"
-#include "DHTComponent.hpp"
+#include "MainComponent.hpp"
 #include "Screen.hpp"
 
 #ifdef SSID_CLOVER
@@ -15,16 +13,12 @@
     const char* pswd = PSWD_CLOVER;
 #endif
 
-Component humidity(ComponentType::Analog, PIN_A0);
-LedComponent led(D8,D7,2);
-DHTComponent airSensor(DHT11,D3);
-
 void setup()
 {
     // Sensors/Acuators setup
-    led.setup();
-    airSensor.setup();
+    MainComponent::GetInstance().setup();
     // Lights are off when powered
+    auto& led = MainComponent::GetInstance().getLed();
     led.setColor(0,{0,0,0});
     led.setColor(1,{0,0,0});
 
@@ -43,8 +37,6 @@ void loop()
     auto& serverHandler = ServerHandler::GetInstance();
     auto& dataHandler = DataHandler::GetInstance();
     auto& screen = Display::Screen::GetInstance();
-    led.setColor(0,{32,0,0});
-    led.setColor(1,{0,32,0});
 
     // Could not connect after setup: Showing screen failure
     if(!serverHandler.isConnected())
@@ -71,9 +63,9 @@ void loop()
 
     // Data gathered from various sensors
     // 0 -> air(0), 0-300 -> dry(20), 300-700 -> humid (580), 700-950 -> water(940)
-    auto soilHumidityData = static_cast<float>(std::any_cast<int>(humidity.getValue()));
-    auto airTemperatureData = airSensor.getTemperature();
-    auto airHumidityData = airSensor.getHumidity();
+    auto soilHumidityData = static_cast<float>(std::any_cast<int>(MainComponent::GetInstance().getHumidity().getValue()));
+    auto airTemperatureData = MainComponent::GetInstance().getDHT().getTemperature();
+    auto airHumidityData = MainComponent::GetInstance().getDHT().getHumidity();
 
     // Updating the data handler
     dataHandler.updateSoilMoistureData(soilHumidityData);
