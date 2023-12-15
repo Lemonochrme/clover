@@ -21,18 +21,20 @@ DHTComponent airSensor(DHT11,D3);
 
 void setup()
 {
-    Serial.begin(9600);
-    Display::Screen::GetInstance().Setup(const_cast<uint8_t*>(u8g2_font_busdisplay8x5_tr));
-    ServerHandler::GetInstance().setup(ssid, pswd);
-
-    Serial.print("Connected to WiFi. IP address: ");
-    Serial.println(WiFi.localIP());
+    // Sensors/Acuators setup
     led.setup();
     airSensor.setup();
-
     // Lights are off when powered
     led.setColor(0,{0,0,0});
     led.setColor(1,{0,0,0});
+
+    // Setup for screen and server
+    Serial.begin(9600);
+    Display::Screen::GetInstance().Setup(const_cast<uint8_t*>(u8g2_font_busdisplay8x5_tr));
+    ServerHandler::GetInstance().setup(ssid, pswd);
+    // Printing server data
+    Serial.print("Connected to WiFi. IP address: ");
+    Serial.println(WiFi.localIP());
 }
 
 void loop()
