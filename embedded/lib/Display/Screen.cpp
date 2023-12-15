@@ -1,4 +1,6 @@
 #include "Screen.hpp"
+
+#include "MainComponent.hpp"
 #include <vector>
 #include <memory>
 
@@ -126,6 +128,10 @@ void Screen::boot()
   _bootFrame++;
   bootWindow.Update(0,CLOVER_FRAMES[(_bootFrame >= 10 ? 10 : _bootFrame)]);
   _screen->sendBuffer();
+
+  // Shutting down led when finished booting
+  if(_bootFrame == MAX_BOOT_FRAMES)
+    MainComponent::GetInstance().getLed().setColor(0,LedColors::LED_OFF);
 }
 
 void Screen::loop(const float plantHumidity, const float airTemperature, const float airHumidity)

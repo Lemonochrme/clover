@@ -12,6 +12,9 @@ void MainComponent::setup()
 {
     _led.setup();
     _dht.setup();
+    // Lights are off when powered
+    _led.setColor(0,{0,0,0});
+    _led.setColor(1,{0,0,0});
 }
 
 Component& MainComponent::getHumidity() { return _humidity; }

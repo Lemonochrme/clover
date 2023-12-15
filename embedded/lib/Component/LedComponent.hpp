@@ -8,7 +8,16 @@ struct Color
     byte red;
     byte blue;
     byte green;
+
+    Color operator-(byte value);
 };
+
+namespace LedColors
+{
+    constexpr Color LED_OFF = {0,0,0};
+    constexpr Color WIFI_ON = {0x18,0x28,0x36};
+    constexpr Color NO_WIFI = {0x64,0x04,0x0B};
+}
 
 class LedComponent
 {
@@ -17,6 +26,7 @@ public:
     ~LedComponent();
     void setup();
     void setColor(uint8_t led_number, Color color);
+    void setColor(uint8_t led_number, Color color, uint16_t fading_time);
 
 private:
     byte _pin;
