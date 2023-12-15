@@ -29,6 +29,10 @@ void setup()
     Serial.println(WiFi.localIP());
     led.setup();
     airSensor.setup();
+
+    // Lights are off when powered
+    led.setColor(0,{0,0,0});
+    led.setColor(1,{0,0,0});
 }
 
 void loop()
@@ -68,16 +72,14 @@ void loop()
     auto soilHumidityData = static_cast<float>(std::any_cast<int>(humidity.getValue()));
     auto airTemperatureData = airSensor.getTemperature();
     auto airHumidityData = airSensor.getHumidity();
-    auto lightData = random(0, 1000) / 10.0;
 
     // Updating the data handler
     dataHandler.updateSoilMoistureData(soilHumidityData);
     dataHandler.updateAirTemperatureData(airTemperatureData);
     dataHandler.updateAirHumidityData(airHumidityData);
-    dataHandler.updateLightData(lightData);
 
     // Screen showing
-    screen.loop(soilHumidityData,airTemperatureData,airHumidityData,lightData);
+    screen.loop((soilHumidityData/950.0f)*100.0f,airTemperatureData,airHumidityData);
     
     // TODO: Add LedComponent management
     if (soilHumidityData < 550) {
@@ -85,6 +87,7 @@ void loop()
     } else if (soilHumidityData >= 550 && soilHumidityData <= 680) {
         Serial.println("Idle...");
     } else {
+        Serial.println("Soil too wet.");
         Serial.println("Soil too wet.");
     }
 

@@ -128,14 +128,13 @@ void Screen::boot()
   _screen->sendBuffer();
 }
 
-void Screen::loop(const float plantHumidity, const float airTemperature, const float airHumidity, const float light)
+void Screen::loop(const float plantHumidity, const float airTemperature, const float airHumidity)
 {
   _screen->clearBuffer();
   // Updating with values
   loopWindow.Update(0,String("Hum: ")+String(plantHumidity,1)+String("%"));
   loopWindow.Update(1,String("Tem: ")+String(airTemperature,1)+String("°C"));
   loopWindow.Update(2,String("Hum: ")+String(airHumidity,1)+String("%"));
-  //loopWindow.Update(3,String("Light: ")+String(light,1)+String("%"));
   // Component
   loopWindow.Display();
   iconWindow.Display();
