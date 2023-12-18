@@ -5,12 +5,13 @@
 #include "ServerHandler.hpp"
 #include "MainComponent.hpp"
 #include "Screen.hpp"
+#include "moisture.hpp"
 
 #ifdef SSID_CLOVER
-    const char* ssid = SSID_CLOVER;
+const char *ssid = SSID_CLOVER;
 #endif
 #ifdef PSWD_CLOVER
-    const char* pswd = PSWD_CLOVER;
+const char *pswd = PSWD_CLOVER;
 #endif
 
 void setup()
@@ -20,9 +21,9 @@ void setup()
 
     // Setup for screen and server
     Serial.begin(9600);
-    Display::Screen::GetInstance().Setup(const_cast<uint8_t*>(u8g2_font_busdisplay8x5_tr));
+    Display::Screen::GetInstance().Setup(const_cast<uint8_t *>(u8g2_font_busdisplay8x5_tr));
     ServerHandler::GetInstance().setup(ssid, pswd);
-    
+
     // Printing server data
     Serial.print("Connected to WiFi. IP address: ");
     Serial.println(WiFi.localIP());
@@ -31,19 +32,19 @@ void setup()
 void loop()
 {
     // Creating variables to access singletons
-    auto& serverHandler = ServerHandler::GetInstance();
-    auto& dataHandler = DataHandler::GetInstance();
-    auto& screen = Display::Screen::GetInstance();
+    auto &serverHandler = ServerHandler::GetInstance();
+    auto &dataHandler = DataHandler::GetInstance();
+    auto &screen = Display::Screen::GetInstance();
 
     // Could not connect after setup: Showing screen failure
-    if(!serverHandler.isConnected())
+    if (!serverHandler.isConnected())
     {
         screen.notConnected();
         return;
     }
 
     // Server showing IP
-    if(!serverHandler.showBoot())
+    if (!serverHandler.showBoot())
     {
         serverHandler.showIp();
         delay(250);
@@ -51,7 +52,7 @@ void loop()
     }
 
     // When Screen can boot (isBooting) and Server finished showing IP (showBoot)
-    if(screen.isBooting() && serverHandler.showBoot())
+    if (screen.isBooting() && serverHandler.showBoot())
     {
         screen.boot();
         delay(100);
@@ -69,18 +70,9 @@ void loop()
     dataHandler.updateAirTemperatureData(airTemperatureData);
     dataHandler.updateAirHumidityData(airHumidityData);
 
-    // Screen showing
-    screen.loop((soilHumidityData/950.0f)*100.0f,airTemperatureData,airHumidityData);
-    
-    // TODO: Add LedComponent management
-    if (soilHumidityData < 550) {
-        Serial.println("Soil humidity low. Please water the plant.");
-    } else if (soilHumidityData >= 550 && soilHumidityData <= 680) {
-        Serial.println("Idle...");
-    } else {
-        Serial.println("Soil too wet.");
-        Serial.println("Soil too wet.");
-    }
+    // Showing screen
+    screen.loop((soilHumidityData / 950.0f) * 100.0f, airTemperatureData, airHumidityData);
+    plantLedLoop(soilHumidityData);
 
     serverHandler.loop();
 }
