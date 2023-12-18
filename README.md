@@ -1,4 +1,4 @@
-# CLOVER IoT PLANT MANAGER
+# 🍀 Clover
 
 🍀 Visit our [website](https://www.clover.ovh/)
 
@@ -55,8 +55,10 @@ You can read more in the  [`README`](app)
 
 ## ❓ How to Install ❓
 
-Simply install [*Visual Studio Code*](https://code.visualstudio.com/Download) or any app that supports [*PlatformIO*](https://platformio.org/). Then install this extension on your favorite IDE.
+1. Simply install [*Visual Studio Code*](https://code.visualstudio.com/Download) or any app that supports [*PlatformIO*](https://platformio.org/). Then install this extension on your favorite IDE.
 
-Follow the guidelines on the components connections, flash the program and you are good to go !
+2. Write your Wi-Fi *SSID* and *password* in a created `.env` file inside the `embedded` directory.
 
-*NB: f the screen is not detected, the program may not start.*
+3. Follow the guidelines on the components connections, flash the program and you are good to go !
+
+*NB: If the screen is not detected, the program may not start.*
