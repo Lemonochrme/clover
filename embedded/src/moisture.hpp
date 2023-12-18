@@ -16,7 +16,8 @@ namespace MoistureLevel {
 
 enum class LedMoistureStatus {
     IDLE,
-    WARNING,
+    DRY,
+    WET
 };
 
 void plantLedLoop(float soilHumidity);
