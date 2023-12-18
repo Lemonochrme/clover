@@ -5,9 +5,9 @@
 
 inline void led_blink(LedComponent& led)
 {
-    led.setColor(0,LedColors::WIFI_ON);
+    led.setColor(LedNumber::LED_HARDWARE,LedColors::WIFI_ON);
     delay(50);
-    led.setColor(0,LedColors::LED_OFF);
+    led.setColor(LedNumber::LED_HARDWARE,LedColors::LED_OFF);
 }
 
 ServerHandler::ServerHandler() : server(80), display_time(0), _connected(false)
@@ -40,13 +40,13 @@ void ServerHandler::setup(const char *ssid, const char *password)
     {
         _connected = true;
         auto color = LedColors::WIFI_ON;
-        led.setColor(0,color-15,200);
+        led.setColor(LedNumber::LED_HARDWARE,color-15,200);
         server.begin();
         server.on("/", [this]()
                 { this->handleRoot(); }); // fonction lamda pour gérer les requettes get
     }
     else {
-        led.setColor(0,LedColors::NO_WIFI,200);
+        led.setColor(LedNumber::LED_HARDWARE,LedColors::NO_WIFI,200);
     }
 }
 

@@ -23,24 +23,20 @@ void LedComponent::setup()
     _led = new ChainableLED(_pinClock, _pin, _ledNumber);
 }
 
-void LedComponent::setColor(uint8_t led_number, Color color)
+void LedComponent::setColor(LedNumber led_number, Color color)
 {
-    if (led_number >= _ledNumber)
-        return;
-    _led->setColorRGB(led_number, color.red, color.green, color.blue);
+    _led->setColorRGB(static_cast<byte>(led_number), color.red, color.green, color.blue);
 }
 
-void LedComponent::setColor(uint8_t led_number, Color color, uint16_t fading_time)
+void LedComponent::setColor(LedNumber led_number, Color color, uint16_t fading_time)
 {
-    if (led_number >= _ledNumber)
-        return;
     const auto redFade = color.red / (static_cast<float>(fading_time));
     const auto greenFade = color.green / (static_cast<float>(fading_time));
     const auto blueFade = color.blue / (static_cast<float>(fading_time));
 
     for (uint16_t time(0); time < fading_time; time++)
     {
-        _led->setColorRGB(led_number, static_cast<byte>(redFade * time), static_cast<byte>(greenFade * time), static_cast<byte>(blueFade * time));
+        _led->setColorRGB(static_cast<byte>(led_number), static_cast<byte>(redFade * time), static_cast<byte>(greenFade * time), static_cast<byte>(blueFade * time));
         delay(1);
     }
 }

@@ -131,7 +131,7 @@ void Screen::boot()
 
   // Shutting down led when finished booting
   if(_bootFrame == MAX_BOOT_FRAMES)
-    MainComponent::GetInstance().getLed().setColor(0,LedColors::LED_OFF);
+    MainComponent::GetInstance().getLed().setColor(LedNumber::LED_HARDWARE,LedColors::LED_OFF);
 }
 
 void Screen::loop(const float plantHumidity, const float airTemperature, const float airHumidity)
