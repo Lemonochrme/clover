@@ -6,9 +6,6 @@
 
 // XBM Files
 #include "../Pictures/failed.xbm"
-#include "../Pictures/humidity.xbm"
-#include "../Pictures/thermometer.xbm"
-#include "../Pictures/air_humidity.xbm"
 
 using namespace Display;
 
@@ -35,9 +32,9 @@ void Screen::Setup(uint8_t *font)
   auto plantHumidity = TextBox("plantHumidity", StyleWidth::LEFT, StyleHeight::TOP, U8G2_BTN_BW0, 0, 0);
   auto airTemperature = TextBox("airTemperature", StyleWidth::LEFT, StyleHeight::CENTERED, U8G2_BTN_BW0, 0, 0);
   auto airHumidity = TextBox("airHumidity", StyleWidth::LEFT, StyleHeight::BOTTOM, U8G2_BTN_BW0, 0, 6);
-  auto humidityPicture = SpriteBox(humidity_bits,humidity_width,humidity_height,StyleWidth::LEFT,StyleHeight::CENTERED);
-  auto thermometerPicture = SpriteBox(thermometer_bits,thermometer_width,thermometer_height,StyleWidth::LEFT,StyleHeight::CENTERED);
-  auto airHumidityPicture = SpriteBox(air_humidity_bits,air_humidity_width,air_humidity_height,StyleWidth::LEFT,StyleHeight::CENTERED);
+  auto humidityPicture = SpriteBox(ICONS[0].data,ICONS[0].width,ICONS[0].height,StyleWidth::LEFT,StyleHeight::CENTERED);
+  auto thermometerPicture = SpriteBox(ICONS[1].data,ICONS[1].width,ICONS[1].height,StyleWidth::LEFT,StyleHeight::CENTERED);
+  auto airHumidityPicture = SpriteBox(ICONS[2].data,ICONS[2].width,ICONS[2].height,StyleWidth::LEFT,StyleHeight::CENTERED);
 
   // Config Boxes
   plantHumidity.SetOffset(OFFSET_TEXT,12);
@@ -146,6 +143,15 @@ void Screen::loop(const float plantHumidity, const float airTemperature, const f
   iconWindow.Display();
   // Displaying
   _screen->sendBuffer();
+}
+
+void Screen::setWarningIcon(Sensors sensorId, bool warning)
+{
+  const auto realId = static_cast<size_t>(sensorId);
+  if(warning)
+    iconWindow.Update(realId,ICONS_WARNING[realId]);
+  else
+    iconWindow.Update(realId,ICONS[realId]);
 }
 
 uint16_t Screen::getHeight() { return _height; }

@@ -5,7 +5,7 @@
 #include "ServerHandler.hpp"
 #include "MainComponent.hpp"
 #include "Screen.hpp"
-#include "moisture.hpp"
+#include "warning.hpp"
 
 #ifdef SSID_CLOVER
 const char *ssid = SSID_CLOVER;
@@ -72,7 +72,8 @@ void loop()
 
     // Showing screen
     screen.loop((soilHumidityData / 950.0f) * 100.0f, airTemperatureData, airHumidityData);
-    plantLedLoop(soilHumidityData);
+    Warning::warningLedLoop(soilHumidityData);
+    Warning::warningScreenLoop(soilHumidityData,airTemperatureData,airHumidityData);
 
     serverHandler.loop();
 }

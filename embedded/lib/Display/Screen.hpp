@@ -20,6 +20,14 @@
 #include "../Pictures/clover10.xbm"
 #include "../Pictures/clover11.xbm"
 
+// Icons
+#include "../Pictures/humidity.xbm"
+#include "../Pictures/thermometer.xbm"
+#include "../Pictures/air_humidity.xbm"
+#include "../Pictures/humidity-warning.xbm"
+#include "../Pictures/thermometer-warning.xbm"
+#include "../Pictures/air_humidity-warning.xbm"
+
 namespace Display
 {
     constexpr Picture CLOVER_FRAMES[] = {
@@ -35,9 +43,25 @@ namespace Display
         {clover10_bits, clover10_width, clover10_height},
         {clover11_bits, clover11_width, clover11_height},
     };
+    constexpr Picture ICONS[] = {
+        {humidity_bits,humidity_width,humidity_height},
+        {thermometer_bits,thermometer_width,thermometer_height},
+        {air_humidity_bits,air_humidity_width,air_humidity_height},
+    };
+    constexpr Picture ICONS_WARNING[] = {
+        {humidity_warning_bits,humidity_warning_width,humidity_warning_height},
+        {thermometer_warning_bits,thermometer_warning_width,thermometer_warning_height},
+        {air_humidity_warning_bits,air_humidity_warning_width,air_humidity_warning_height},
+    };
     constexpr uint8_t MAX_BOOT_FRAMES = 25;
     constexpr uint8_t OFFSET_ICONS = 55;
     constexpr uint8_t OFFSET_TEXT = 75;
+
+    enum class Sensors {
+        SOIL_MOISTURE = 0,
+        THERMOMETER,
+        AIR_HUMIDITY
+    };
 
     class Screen
     {
@@ -55,6 +79,7 @@ namespace Display
         void connected(const char *ipaddress, uint8_t timing);
         void boot();
         void loop(const float plantHumidity, const float airTemperature, const float airHumidity);
+        void setWarningIcon(Sensors sensorId, bool warning=true);
         // Getters
         uint16_t getHeight();
         uint16_t getWidth();
