@@ -20,13 +20,29 @@ namespace Warning {
     constexpr float AIR_TEMPERATURE_TOO_HOT = 29.0f;
     constexpr float AIR_TEMPERATURE_TOO_COLD = 14.0f;
 
+    /**
+     * @brief Different type of status for the LED (memory optimisation)
+     */
     enum class LedMoistureStatus {
         IDLE,
         DRY,
         WET
     };
 
+    /**
+     * @brief Change the LED Color depending on the humidity
+     * 
+     * @param soilHumidity 
+     */
     void warningLedLoop(const float soilHumidity);
+
+    /**
+     * @brief Changing icons of the Screen when some parameters are superior to a certain threashold.
+     * 
+     * @param plantMoisture 
+     * @param airTemperature 
+     * @param airHumidity 
+     */
     void warningScreenLoop(const float plantMoisture, const float airTemperature, const float airHumidity);
 }
 

@@ -45,6 +45,7 @@ void Screen::Setup(uint8_t *font)
   airHumidityPicture.SetOffset(OFFSET_ICONS);
   
   // Static Components
+  // Using shared object for inheritance
   connectingWindow.Add({std::make_shared<TextBox>(headerSetup),
                         std::make_shared<TextBox>(TextBox("connect", StyleWidth::CENTERED, StyleHeight::CENTERED, U8G2_BTN_BW0))});
   connectionfailedWindow.Add({std::make_shared<TextBox>(headerSetup),
@@ -110,7 +111,9 @@ void Screen::connected(const char *ipaddress, uint8_t timing)
   if (timing != 0)
   {
     _screen->setFont(u8g2_font_3x3basic_tr);
+    // While timing is not finished, incrementing the loading String
     _loading.concat(" ");
+    // Draw the button in inverted mode
     _screen->drawButtonUTF8(0, _screen->getDisplayHeight() - 5, U8G2_BTN_INV, _screen->getStrWidth(_loading.c_str()), 0, 0, _loading.c_str());
     _screen->setFont(_font);
   }

@@ -14,9 +14,31 @@ public:
         return instance;
     }
     // Public functions
+
+    /**
+     * @brief create all the instanciations of the component
+     */
     void setup();
+
+    /**
+     * @brief Get the Humidity object reference
+     * 
+     * @return Component& 
+     */
     Component& getHumidity();
+
+    /**
+     * @brief Get the Led object reference
+     * 
+     * @return LedComponent& 
+     */
     LedComponent& getLed();
+
+    /**
+     * @brief Get the DHT object reference
+     * 
+     * @return DHTComponent& 
+     */
     DHTComponent& getDHT();
 private:
     // Singleton

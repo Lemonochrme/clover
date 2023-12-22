@@ -13,10 +13,40 @@ public:
     }
 
     // Public functions
+
+    /**
+     * @brief Get the Json Data object
+     * 
+     * @return String 
+     */
     String getJsonData();
+
+    /**
+     * @brief Update the moisture of the internal Data Handler
+     * 
+     * @param humidity 
+     */
     void updateSoilMoistureData(float humidity);
+
+    /**
+     * @brief Update the moisture of the internal Data Handler
+     * 
+     * @param temperature 
+     */
     void updateAirTemperatureData(float temperature);
+
+    /**
+     * @brief Update the moisture of the internal Data Handler
+     * 
+     * @param humidity 
+     */
     void updateAirHumidityData(float humidity);
+
+    /**
+     * @brief Update the moisture of the internal Data Handler
+     * 
+     * @param light 
+     */
     void updateLightData(float light);
 private:
     // Singleton
