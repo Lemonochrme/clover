@@ -5,9 +5,7 @@
 
 enum class ComponentType {
     Digital,
-    Analog,
-    I2C,
-    Serial
+    Analog
 };
 
 class Component{

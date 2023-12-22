@@ -1,5 +1,14 @@
 #include "ServerHandler.hpp"
+
+#include "MainComponent.hpp"
 #include "../Display/Screen.hpp"
+
+inline void led_blink(LedComponent& led)
+{
+    led.setColor(LedNumber::LED_HARDWARE,LedColors::WIFI_ON);
+    delay(50);
+    led.setColor(LedNumber::LED_HARDWARE,LedColors::LED_OFF);
+}
 
 ServerHandler::ServerHandler() : server(80), display_time(0), _connected(false)
 {
@@ -11,13 +20,17 @@ void ServerHandler::setup(const char *ssid, const char *password)
 { // On utilise les scope resolution operator pour définir les méthodes la classe ServerHandle qui elle est dans hpp
     uint8_t state(0);
     uint16_t tryConnection(0);
+    auto& led = MainComponent::GetInstance().getLed();
     Serial.begin(9600);
     WiFi.begin(ssid, password);
 
     // Testing connection
     while ((WiFi.status() != WL_CONNECTED) && (tryConnection < MAX_CONNECT_TRIES))
     {
-        delay(500);
+        led_blink(led);
+        delay(50);
+        led_blink(led);
+        delay(350);
         Display::Screen::GetInstance().connecting(state);
         state >= 3 ? state = 0 : state++;
         tryConnection++;
@@ -26,9 +39,14 @@ void ServerHandler::setup(const char *ssid, const char *password)
     if (tryConnection < MAX_CONNECT_TRIES)
     {
         _connected = true;
+        auto color = LedColors::WIFI_ON;
+        led.setColor(LedNumber::LED_HARDWARE,color-15,200);
         server.begin();
         server.on("/", [this]()
                 { this->handleRoot(); }); // fonction lamda pour gérer les requettes get
+    }
+    else {
+        led.setColor(LedNumber::LED_HARDWARE,LedColors::NO_WIFI,200);
     }
 }
 
