@@ -1,6 +1,6 @@
 # 🍀 Clover
 
-🍀 Visit our [website](https://www.clover.ovh/)
+🍀 Visit our [website](https://www.clover.ovh/) no longer active.
 
 <img src="http://share.etheryo.fr/INSA/4096-3072-max.jpg" title="" alt="ds" data-align="center" max-width="500">
 
